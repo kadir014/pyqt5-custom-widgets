@@ -1,5 +1,6 @@
 # PyQt5 Custom Widgets 🧱
 More useful and stylish widgets for PyQt5 such as toggle switches, animated buttons, etc.. \
+\
 ![showcase](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/showcase.gif) \
 \
 **DISCLAIMER:** \
@@ -26,4 +27,4 @@ from customwidgets import ColorPicker
  - [ ] Optimize and complete color picker widget
 
  ## License
- [GPU v3](LICENSE) © Kadir Aksoy
+ [GPL v3](LICENSE) © Kadir Aksoy
