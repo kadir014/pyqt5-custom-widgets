@@ -15,9 +15,9 @@ from customwidgets import ColorPicker
 ```
 
 ## Widgets
-| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/data/toggleswitch.gif) <br> ToggleSwitch | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/data/styledbutton.gif) <br> StyledButton |
+| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toggleswitch.gif) <br> ToggleSwitch | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/styledbutton.gif) <br> StyledButton |
 | :---: | :---: |
-| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/data/imagebox.png) <br> **ImageBox** | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/colorpicker.png) <br> **ColorPicker** |
+| ![ImageBox](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/imagebox.png) <br> **ImageBox** | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/dcolorpicker.png) <br> **ColorPicker** |
 
 ## Todo
  - [ ] Make styling options more suitable for Qt
