@@ -1,6 +1,6 @@
 # PyQt5 Custom Widgets 🧱
 More useful and stylish widgets for PyQt5 such as toggle switches, animated buttons, etc.. \
-![showcase](https://github.com/kadir014/pyqt5-custom-widgets/data/showcase.gif) \
+![showcase](https://github.com/kadir014/pyqt5-custom-widgets/tree/main/examples/data/showcase.gif) \
 \
 **DISCLAIMER:** \
 Currently most widgets can't use style sheets properly so you have to use attributes to stylize them. I'm planning to remove this inconvenience and make their usage as close as to base Qt widgets in the next update.
@@ -15,9 +15,9 @@ from customwidgets import ColorPicker
 ```
 
 ## Widgets
-| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/data/toggleswitch.gif) <br> ToggleSwitch | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/data/styledbutton.gif) <br> StyledButton |
+| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/tree/main/examples/data/data/toggleswitch.gif) <br> ToggleSwitch | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/tree/main/examples/data/data/styledbutton.gif) <br> StyledButton |
 | :---: | :---: |
-| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/data/imagebox.png) <br> **ImageBox** | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/data/colorpicker.png) <br> **ColorPicker** |
+| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/tree/main/examples/data/data/imagebox.png) <br> **ImageBox** | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/tree/main/examples/data/colorpicker.png) <br> **ColorPicker** |
 
 ## Todo
  - [ ] Make styling options more suitable for Qt
