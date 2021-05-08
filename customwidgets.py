@@ -4,11 +4,13 @@
 
 
 import time
+import os
 from math import ceil, sin, pi, sqrt, atan2, pow
+import requests
 
-from PyQt5.QtCore import Qt, QEvent, pyqtSignal
+from PyQt5.QtCore import Qt, QEvent, QSize, pyqtSignal
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QAbstractButton, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from PyQt5.QtGui import QColor, QPainter, QPixmap, QPen, QBrush, QMovie
+from PyQt5.QtGui import QColor, QPainter, QPixmap, QPen, QBrush, QMovie, QImage
 
 
 
@@ -64,40 +66,67 @@ class AnimationHandler:
 
 
 class ImageBox(QLabel):
-    def __init__(self, filepath=None, keepAspectRatio=True):
+    def __init__(self, source, keepAspectRatio=True, smoothScale=True):
         super().__init__()
 
+        self.source = source
         self.animated = False
+
         self.keepAspectRatio = keepAspectRatio
-        if filepath is not None: self.setSource(filepath)
+        self.smoothScale = smoothScale
 
-    def setSource(self, filepath):
-        self.filepath = filepath
+        if self.source is not None: self.setSource(self.source)
 
-        if filepath.endswith(".gif"):
-            self.animated = True
-            self.orgmovie = QMovie(filepath)
-            self.movie = QMovie(filepath)
-            self.setMovie(self.movie)
-            self.movie.start()
+    def setSource(self, source):
+        self.source = source
+
+        if self.source.startswith("http"):
+
+            if self.source.endswith(".gif"):
+                r = requests.get(self.source)
+
+                with open("temp.gif", "wb") as f:
+                    f.write(r.content)
+
+                self.animated = True
+                self.orgmovie = QMovie("temp.gif")
+                self.movie = self.orgmovie
+                self.setMovie(self.movie)
+                self.movie.start()
+
+            else:
+                r = requests.get(self.source)
+
+                self.animated = False
+                self.orgpixmap = QPixmap.fromImage(QImage.fromData(r.content))
+                self.pixmap = self.orgpixmap
+                self.setPixmap(self.pixmap)
 
         else:
-            self.animated = False
-            self.orgpixmap = QPixmap(filepath)
-            self.pixmap = QPixmap(filepath)
+            if source.endswith(".gif"):
+                self.animated = True
+                self.movie = QMovie(source)
+                self.setMovie(self.movie)
+                self.movie.start()
+
+            else:
+                self.animated = False
+                self.orgpixmap = QPixmap(source)
+                self.pixmap = QPixmap(source)
+                self.setPixmap(self.pixmap)
+
+    def resizeEvent(self, event):
+        w, h = self.width(), self.height()
+
+        t = (Qt.FastTransformation, Qt.SmoothTransformation)[self.smoothScale]
+        k = (Qt.IgnoreAspectRatio, Qt.KeepAspectRatio)[self.keepAspectRatio]
+
+        if self.animated:
+            self.movie.setScaledSize(QSize(w, h))
+
+        else:
+            self.pixmap = self.orgpixmap.scaled(w, h, transformMode=t, aspectRatioMode=k)
             self.setPixmap(self.pixmap)
-
-    def scale(self, scale):
-        if self.keepAspectRatio:
-            self.pixmap = self.orgpixmap.scaled(self.width()*scale, self.height()*scale, transformMode=Qt.SmoothTransformation, aspectRatioMode=Qt.KeepAspectRatio)
-        else:
-            self.pixmap = self.orgpixmap.scaled(self.width()*scale, self.height()*scale, transformMode=Qt.SmoothTransformation)
-
-        self.setPixmap(self.pixmap)
-
-    def resize(self, width, height):
-        self.pixmap = self.orgpixmap.scaled(width, height, transformMode=Qt.SmoothTransformation, aspectRatioMode=Qt.KeepAspectRatio)
-        self.setPixmap(self.pixmap)
 
 
 
