@@ -9,16 +9,22 @@ Currently most widgets can't use style sheets properly so you have to use attrib
 ## Usage
 Just import `customwidgets.py` and you're ready to go. You can check out examples folder for examples. Here are the list of current widgets:
 ```py
-from customwidgets import ToggleSwitch
-from customwidgets import StyledButton
-from customwidgets import ImageBox
-from customwidgets import ColorPicker
+from customwidgets import ToggleSwitch, StyledButton, ...
+
+...
+
+togglesw = ToggleSwitch("Toggle lights", style="ios")
+togglesw.setStyleSheet("font-size:15px; color: #444444;")
+layout.addWidget(togglesw)
+
+...
 ```
 
 ## Widgets
-| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toggleswitch.gif) <br> ToggleSwitch | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/styledbutton.gif) <br> StyledButton |
+| ![ToggleSwitch](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toggleswitch.gif) <br> ToggleSwitch <br> [Documentation](documentation.md) | ![StyledButton](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/styledbutton.gif) <br> StyledButton <br> [Documentation](documentation.md) |
 | :---: | :---: |
-| ![ImageBox](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/imagebox.png) <br> **ImageBox** | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/colorpicker.png) <br> **ColorPicker** |
+| ![ImageBox](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/imagebox.png) <br> **ImageBox** <br> [Documentation](documentation.md) | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/colorpicker.png) <br> **ColorPicker** <br> [Documentation](documentation.md) |
+| ![DragDropFile](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/dropfileshowcase.gif) <br> **DragDropFile** <br> [Documentation](documentation.md) | |
 
 ## Todo
  - [ ] Make styling options more suitable for Qt

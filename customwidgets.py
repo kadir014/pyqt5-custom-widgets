@@ -115,6 +115,8 @@ class ImageBox(QLabel):
                 self.pixmap = QPixmap(source)
                 self.setPixmap(self.pixmap)
 
+        self.resizeEvent(None)
+
     def resizeEvent(self, event):
         w, h = self.width(), self.height()
 
@@ -242,6 +244,75 @@ class ColorPicker(QWidget):
 
 
 
+class DragDropFile(QWidget):
+
+    fileDropped = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+        self.setAcceptDrops(True)
+
+        self.borderColor = QColor(190, 190, 190)
+        self.hoverBackground = QColor(245, 245, 250)
+        self.borderRadius = 26
+        self.borderWidth = 6
+
+        self.layout = QVBoxLayout()
+        self.layout.setAlignment(Qt.AlignCenter)
+        self.setLayout(self.layout)
+
+        self.title_lbl = QLabel("Drop your file here!")
+        self.filename_lbl = QLabel("")
+
+        self.layout.addWidget(self.title_lbl, alignment=Qt.AlignHCenter)
+        self.layout.addSpacing(7)
+        self.layout.addWidget(self.filename_lbl, alignment=Qt.AlignHCenter)
+
+        self.title_lbl.setStyleSheet("font-size:19px;")
+        self.filename_lbl.setStyleSheet("font-size:14px; color: #666666;")
+
+        self.dragEnter = False
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            self.dragEnter = True
+            event.accept()
+            self.repaint()
+        else:
+            event.ignore()
+
+    def dragLeaveEvent(self, event):
+        self.dragEnter = False
+        self.repaint()
+
+    def dropEvent(self, event):
+        filename = event.mimeData().urls()[0].toLocalFile().split("/")[-1]
+        self.filename_lbl.setText(filename)
+
+        self.fileDropped.emit()
+
+        self.dragEnter = False
+        self.repaint()
+
+    def paintEvent(self, event):
+        pt = QPainter()
+        pt.begin(self)
+        pt.setRenderHint(QPainter.Antialiasing)
+
+        pen = QPen(self.borderColor, self.borderWidth, Qt.DotLine, Qt.RoundCap)
+        pt.setPen(pen)
+
+        if self.dragEnter:
+            brush = QBrush(self.hoverBackground)
+            pt.setBrush(brush)
+
+        pt.drawRoundedRect(self.borderWidth, self.borderWidth, self.width()-self.borderWidth*2, self.height()-self.borderWidth*2, self.borderRadius, self.borderRadius)
+
+        pt.end()
+
+
+
 class StyledButton(QAbstractButton):
 
     defaultStyles = ("flat", "hyper")
@@ -318,12 +389,15 @@ class StyledButton(QAbstractButton):
 
     def setIcon(self, filepath):
         self._icon = ImageBox(filepath)
-        self._icon.resize(18, 18)
+        self._icon.setFixedSize(18, 18)
         if self.text:
             self.layout.insertWidget(0, self._icon, alignment=Qt.AlignVCenter|Qt.AlignRight)
             self.layout.addSpacing(30)
         else:
             self.layout.insertWidget(0, self._icon, alignment=Qt.AlignCenter)
+
+    def setIconSize(self, width, height):
+        self._icon.setFixedSize(width, height)
 
     def setDropShadow(self, bshad):
         if bshad:
@@ -473,6 +547,9 @@ class ToggleSwitch(QWidget):
 
         self.anim = AnimationHandler(self, 0, self.width, Animation.easeOutCirc)
         if self.on: self.anim.value = 1
+
+    def isToggled(self):
+        return self.on
 
     def desaturate(self, color):
         cc = getattr(self, color)

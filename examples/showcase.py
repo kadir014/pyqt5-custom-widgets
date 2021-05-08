@@ -9,7 +9,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QLabel
 from PyQt5.QtGui import QColor, QFontDatabase
 
-from customwidgets import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview
+from customwidgets import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile
 
 
 
@@ -53,8 +53,10 @@ class MainWindow(QWidget):
         self.menubtn2 = StyledButton(icon="data/buttonicon.png")
         self.menubtn3 = StyledButton(icon="data/imageicon.png")
         self.menubtn4 = StyledButton(icon="data/colorpckicon.png")
+        self.menubtn5 = StyledButton(icon="data/dragdropicon.png")
 
         self.menubtn1.resize(70, 70)
+        self.menubtn1.setIconSize(40, 40)
         self.menubtn1.borderColor = QColor(245, 66, 126)
         self.menubtn1.backgroundColor = QColor(245, 66, 126)
         self.menubtn1.circleColor = self.menubtn1.borderColor.lighter(146)
@@ -63,6 +65,7 @@ class MainWindow(QWidget):
         self.menubtn1.hoverFactor = 3.8
 
         self.menubtn2.resize(70, 70)
+        self.menubtn2.setIconSize(40, 40)
         self.menubtn2.borderColor = QColor(245, 66, 126)
         self.menubtn2.backgroundColor = QColor(245, 66, 126)
         self.menubtn2.circleColor = self.menubtn2.borderColor.lighter(146)
@@ -71,6 +74,7 @@ class MainWindow(QWidget):
         self.menubtn2.hoverFactor = 3.8
 
         self.menubtn3.resize(70, 70)
+        self.menubtn3.setIconSize(40, 40)
         self.menubtn3.borderColor = QColor(245, 66, 126)
         self.menubtn3.backgroundColor = QColor(245, 66, 126)
         self.menubtn3.circleColor = self.menubtn3.borderColor.lighter(146)
@@ -79,6 +83,7 @@ class MainWindow(QWidget):
         self.menubtn3.hoverFactor = 3.8
 
         self.menubtn4.resize(70, 70)
+        self.menubtn4.setIconSize(40, 40)
         self.menubtn4.borderColor = QColor(245, 66, 126)
         self.menubtn4.backgroundColor = QColor(245, 66, 126)
         self.menubtn4.circleColor = self.menubtn4.borderColor.lighter(146)
@@ -86,11 +91,21 @@ class MainWindow(QWidget):
         self.menubtn4.hoverLighter = True
         self.menubtn4.hoverFactor = 3.8
 
+        self.menubtn5.resize(70, 70)
+        self.menubtn5.setIconSize(40, 40)
+        self.menubtn5.borderColor = QColor(245, 66, 126)
+        self.menubtn5.backgroundColor = QColor(245, 66, 126)
+        self.menubtn5.circleColor = self.menubtn4.borderColor.lighter(146)
+        self.menubtn5.borderRadius = 14
+        self.menubtn5.hoverLighter = True
+        self.menubtn5.hoverFactor = 3.8
+
         self.menu.addSpacing(10)
         self.menu.addWidget(self.menubtn1, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn2, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn3, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn4, alignment=Qt.AlignTop|Qt.AlignCenter)
+        self.menu.addWidget(self.menubtn5, alignment=Qt.AlignTop|Qt.AlignCenter)
 
         @self.menubtn1.clicked.connect
         def slot():
@@ -98,6 +113,7 @@ class MainWindow(QWidget):
             self.stbtn_showcase_wdt.hide()
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
 
         @self.menubtn2.clicked.connect
         def slot():
@@ -105,6 +121,7 @@ class MainWindow(QWidget):
             self.stbtn_showcase_wdt.show()
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
 
         @self.menubtn3.clicked.connect
         def slot():
@@ -112,6 +129,7 @@ class MainWindow(QWidget):
             self.stbtn_showcase_wdt.hide()
             self.imgbox_showcase_wdt.show()
             self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
 
         @self.menubtn4.clicked.connect
         def slot():
@@ -119,6 +137,15 @@ class MainWindow(QWidget):
             self.stbtn_showcase_wdt.hide()
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.show()
+            self.dropfile_showcase_wdt.hide()
+
+        @self.menubtn5.clicked.connect
+        def slot():
+            self.togglesw_showcase_wdt.hide()
+            self.stbtn_showcase_wdt.hide()
+            self.imgbox_showcase_wdt.hide()
+            self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.show()
 
 
         ##################################################
@@ -308,7 +335,7 @@ class MainWindow(QWidget):
         self.imgbox_hstatic_lyt.addSpacing(100)
 
         self.imgbox_static1 = ImageBox("data/image.jpg", keepAspectRatio=True)
-        self.imgbox_static1.scale(0.35)
+        self.imgbox_static1.setFixedSize(110, 110)
         self.imgbox_static1_lbl = QLabel("<span style='font-size:14px; color:#888888'>Aspect ratio protected</span>")
         self.imgbox_static1_lyt.addWidget(self.imgbox_static1)
         self.imgbox_static1_lyt.addWidget(self.imgbox_static1_lbl, alignment=Qt.AlignHCenter)
@@ -318,15 +345,18 @@ class MainWindow(QWidget):
         self.imgbox_hstatic_lyt.addLayout(self.imgbox_static2_lyt)
 
         self.imgbox_static2 = ImageBox("data/image.jpg", keepAspectRatio=False)
-        self.imgbox_static2.scale(0.35)
+        self.imgbox_static2.setFixedSize(110, 110)
         self.imgbox_static2_lbl = QLabel("<span style='font-size:14px; color:#888888'>Aspect ratio ignored</span>")
         self.imgbox_static2_lyt.addWidget(self.imgbox_static2)
         self.imgbox_static2_lyt.addWidget(self.imgbox_static2_lbl, alignment=Qt.AlignHCenter)
+
+        self.imgbox_showcase_lyt.addSpacing(80)
 
         self.imgbox_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>You can also use animated GIFs.</span>"),
                                            alignment=Qt.AlignHCenter)
 
         self.imgbox_animated = ImageBox("data/luffy.gif")
+        self.imgbox_animated.setFixedSize(250, 210)
         self.imgbox_showcase_lyt.addWidget(self.imgbox_animated, alignment=Qt.AlignHCenter)
 
 
@@ -361,16 +391,42 @@ class MainWindow(QWidget):
         self.colorpk_picker.colorChanged.connect(self.colorpk_cpre.setColor)
 
 
+        ##################################################
+        #                                                #
+        #              DragDropFile Widget               #
+        #                                                #
+        ##################################################
+
+        self.dropfile_showcase_wdt = QWidget()
+        self.dropfile_showcase_lyt = QVBoxLayout()
+        self.dropfile_showcase_lyt.setSpacing(5)
+        self.dropfile_showcase_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
+        self.dropfile_showcase_wdt.setLayout(self.dropfile_showcase_lyt)
+
+        self.dropfile_showcase_lyt.addWidget(QLabel("<span style='font-size:30px;'>File Drag & Drop</span>"),
+                                           alignment=Qt.AlignHCenter)
+        self.dropfile_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>Drag files and drop on this widget.</span>"),
+                                           alignment=Qt.AlignHCenter)
+
+        self.dropfile_showcase_lyt.addSpacing(140)
+
+        self.dropfile = DragDropFile()
+        self.dropfile.setFixedSize(300, 210)
+        self.dropfile_showcase_lyt.addWidget(self.dropfile)
+
+
         # finalize layout
         self.layout.addWidget(self.togglesw_showcase_wdt)
         self.layout.addWidget(self.stbtn_showcase_wdt)
         self.layout.addWidget(self.imgbox_showcase_wdt)
         self.layout.addWidget(self.colorpk_showcase_wdt)
+        self.layout.addWidget(self.dropfile_showcase_wdt)
 
         self.togglesw_showcase_wdt.show()
         self.stbtn_showcase_wdt.hide()
         self.imgbox_showcase_wdt.hide()
         self.colorpk_showcase_wdt.hide()
+        self.dropfile_showcase_wdt.hide()
 
 
 
