@@ -9,7 +9,7 @@ from math import ceil, sin, pi, sqrt, atan2, pow
 import random
 import requests
 
-from PyQt5.QtCore import Qt, QEvent, QSize, pyqtSignal
+from PyQt5.QtCore import Qt, QEvent, QSize, QPoint, pyqtSignal
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QAbstractButton, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
 from PyQt5.QtGui import QColor, QPainter, QPixmap, QPen, QBrush, QMovie, QImage
 
@@ -63,6 +63,110 @@ class AnimationHandler:
             return self.endv - (self.value * (self.endv-self.startv))
         else:
             return self.value * (self.endv-self.startv)
+
+
+
+class TitleBar(QWidget):
+    def __init__(self, parent, title=""):
+        super().__init__(parent)
+
+        self.parent().setWindowTitle(title)
+        self.parent().setWindowFlags(Qt.FramelessWindowHint)
+
+        self.setFixedHeight(32)
+
+        self.layout = QHBoxLayout()
+        self.layout.setContentsMargins(14, 0, 0, 0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
+        self.title_lbl = QLabel(title)
+        self.layout.addWidget(self.title_lbl)
+
+        self.close_btn = StyledButton(text="✕")
+        self.close_btn.setStyleSheet("font-size:18px;")
+        self.close_btn.setFixedSize(self.height()+19, self.height())
+        self.close_btn.borderRadius = 0
+        self.close_btn.borderColor = QColor(245, 66, 126, 0)
+        self.close_btn.backgroundColor = QColor(245, 66, 126)
+        self.close_btn.circleColor = self.close_btn.borderColor.lighter(146)
+        self.close_btn.hoverLighter = True
+        self.close_btn.hoverFactor = 3.8
+
+        self.max_btn = StyledButton(text="🗖")
+        self.max_btn.setStyleSheet("font-size:18px;")
+        self.max_btn.setFixedSize(self.height()+19, self.height())
+        self.max_btn.borderRadius = 0
+        self.max_btn.borderColor = QColor(245, 66, 126, 0)
+        self.max_btn.backgroundColor = QColor(245, 66, 126)
+        self.max_btn.circleColor = self.max_btn.borderColor.lighter(146)
+        self.max_btn.hoverLighter = True
+        self.max_btn.hoverFactor = 3.8
+
+        self.min_btn = StyledButton(text="🗕")
+        self.min_btn.setStyleSheet("font-size:18px;")
+        self.min_btn.setFixedSize(self.height()+19, self.height())
+        self.min_btn.borderRadius = 0
+        self.min_btn.borderColor = QColor(245, 66, 126, 0)
+        self.min_btn.backgroundColor = QColor(245, 66, 126)
+        self.min_btn.circleColor = self.min_btn.borderColor.lighter(146)
+        self.min_btn.hoverLighter = True
+        self.min_btn.hoverFactor = 3.8
+
+        self.close_btn.clicked.connect(self.parent().close)
+
+        self.min_btn.clicked.connect(self.parent().showMinimized)
+
+        @self.max_btn.clicked.connect
+        def slot():
+            if self.parent().isMaximized():
+                self.parent().showNormal()
+            else:
+                self.parent().showMaximized()
+
+        self.layout.addWidget(self.min_btn, alignment=Qt.AlignRight)
+        self.layout.addWidget(self.max_btn)
+        self.layout.addWidget(self.close_btn)
+
+        self.pressing = False
+
+    def setTitle(self, title):
+        self.parent().setWindowTitle(title)
+        self.title_lbl.setText(title)
+
+    def title(self):
+        return self.title_lbl.text()
+
+    def paintEvent(self, event):
+        pt = QPainter()
+        pt.begin(self)
+        pt.setRenderHint(QPainter.Antialiasing)
+
+        brush = QBrush(QColor(245, 66, 126))
+        pen = QPen(QColor(0, 0, 0, 0), 0)
+        pt.setBrush(brush)
+        pt.setPen(pen)
+
+        pt.drawRect(0, 0, self.width(), self.height())
+
+        pt.end()
+
+    def mousePressEvent(self, event):
+        self.start = self.mapToGlobal(event.pos())
+        self.pressing = True
+
+    def mouseReleaseEvent(self, event):
+        self.pressing = False
+
+    def mouseMoveEvent(self, event):
+        if self.pressing:
+            end = self.mapToGlobal(event.pos())
+            self.movement = end - self.start
+            self.parent().setGeometry(self.mapToGlobal(self.movement).x(),
+                                      self.mapToGlobal(self.movement).y(),
+                                      self.parent().width(),
+                                      self.parent().height())
+            self.start = end
 
 
 
