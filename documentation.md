@@ -54,6 +54,8 @@ Here is the list of currently implemented widgets
 - `keepAspectRatio` (bool) : Protect aspect ratio. This parameter is optional
 - `smoothScale` (bool) : Transform the image smoothly. This parameter is optional
 
+#### Methods
+- `setIcon(filepath)` : Changes button's icon
 
 
 ## ColorPicker
@@ -70,3 +72,18 @@ Here is the list of currently implemented widgets
 
 #### Signals
 - `fileDropped` : This signal is emitted when a file is dropped on widget
+
+## EmbedWindow
+`EmbedWindow` is a dialog window which is not a popup, it is embedded onto the parent widget \
+\
+![EmbedWindow](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/embedwindow.png)
+
+#### Parameters
+- `parent` (QWidget) : Parent widget of the window
+
+#### Attributes
+- `content` (QLayout) : Window's layout where you can add your own widgets
+
+#### Methods
+- `setTitle(title)` : Change title of the window
+- `setControlsVisible(bool)` : Change visibility of control buttons

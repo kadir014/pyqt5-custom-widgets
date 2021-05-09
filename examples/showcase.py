@@ -6,10 +6,10 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 from PyQt5.QtGui import QColor, QFontDatabase
 
-from customwidgets import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile
+from customwidgets import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile, EmbedWindow
 
 
 
@@ -54,6 +54,7 @@ class MainWindow(QWidget):
         self.menubtn3 = StyledButton(icon="data/imageicon.png")
         self.menubtn4 = StyledButton(icon="data/colorpckicon.png")
         self.menubtn5 = StyledButton(icon="data/dragdropicon.png")
+        self.menubtn6 = StyledButton(icon="data/windowicon.png")
 
         self.menubtn1.resize(70, 70)
         self.menubtn1.setIconSize(40, 40)
@@ -100,12 +101,22 @@ class MainWindow(QWidget):
         self.menubtn5.hoverLighter = True
         self.menubtn5.hoverFactor = 3.8
 
+        self.menubtn6.resize(70, 70)
+        self.menubtn6.setIconSize(40, 40)
+        self.menubtn6.borderColor = QColor(245, 66, 126)
+        self.menubtn6.backgroundColor = QColor(245, 66, 126)
+        self.menubtn6.circleColor = self.menubtn4.borderColor.lighter(146)
+        self.menubtn6.borderRadius = 14
+        self.menubtn6.hoverLighter = True
+        self.menubtn6.hoverFactor = 3.8
+
         self.menu.addSpacing(10)
         self.menu.addWidget(self.menubtn1, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn2, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn3, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn4, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn5, alignment=Qt.AlignTop|Qt.AlignCenter)
+        self.menu.addWidget(self.menubtn6, alignment=Qt.AlignTop|Qt.AlignCenter)
 
         @self.menubtn1.clicked.connect
         def slot():
@@ -114,6 +125,7 @@ class MainWindow(QWidget):
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
 
         @self.menubtn2.clicked.connect
         def slot():
@@ -122,6 +134,7 @@ class MainWindow(QWidget):
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
 
         @self.menubtn3.clicked.connect
         def slot():
@@ -130,6 +143,7 @@ class MainWindow(QWidget):
             self.imgbox_showcase_wdt.show()
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
 
         @self.menubtn4.clicked.connect
         def slot():
@@ -138,6 +152,7 @@ class MainWindow(QWidget):
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.show()
             self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
 
         @self.menubtn5.clicked.connect
         def slot():
@@ -146,6 +161,16 @@ class MainWindow(QWidget):
             self.imgbox_showcase_wdt.hide()
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.show()
+            self.emwin_showcase_wdt.hide()
+
+        @self.menubtn6.clicked.connect
+        def slot():
+            self.togglesw_showcase_wdt.hide()
+            self.stbtn_showcase_wdt.hide()
+            self.imgbox_showcase_wdt.hide()
+            self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.show()
 
 
         ##################################################
@@ -415,18 +440,73 @@ class MainWindow(QWidget):
         self.dropfile_showcase_lyt.addWidget(self.dropfile)
 
 
+        ##################################################
+        #                                                #
+        #              EmbedWindow Widget                #
+        #                                                #
+        ##################################################
+
+        self.emwin_showcase_wdt = QWidget()
+        self.emwin_showcase_lyt = QVBoxLayout()
+        self.emwin_showcase_lyt.setSpacing(5)
+        self.emwin_showcase_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
+        self.emwin_showcase_wdt.setLayout(self.emwin_showcase_lyt)
+
+        self.emwin_showcase_lyt.addWidget(QLabel("<span style='font-size:30px;'>Embed Window</span>"),
+                                           alignment=Qt.AlignHCenter)
+        self.emwin_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>A pop-up dialog, but actually embed.</span>"),
+                                           alignment=Qt.AlignHCenter)
+
+        self.emwin_showcase_lyt.addSpacing(70)
+
+        self.emwin_spawner = StyledButton("Click here to spawn embed windows")
+        self.emwin_spawner.setFixedHeight(33)
+        self.emwin_showcase_lyt.addWidget(self.emwin_spawner)
+
+        self.emwin_windows = list()
+
+        # Parent is main window
+        @self.emwin_spawner.clicked.connect
+        def slot():
+            ewl = QLabel("<span style='color:#333333; font-size: 15px;'>My parent is the top-level widget so I can move anywhere 😎</span>")
+            ewl.setWordWrap(True)
+            ew = EmbedWindow(self)
+            ew.content.addWidget(ewl)
+            ew.closed.connect(lambda: self.emwin_windows.remove(ew))
+            self.emwin_windows.append(ew)
+            ew.show()
+            ew.raise_()
+
+        self.emwin_showcase_lyt.addSpacing(30)
+
+        self.emwin_showcase_lyt.addWidget(QLabel("<span style='font-size:14px; color: #999999;'>There is a QFrame with invisible borders</span>"))
+
+        self.emwin_frame = QFrame()
+        self.emwin_frame.setFixedSize(400, 300)
+        self.emwin_showcase_lyt.addWidget(self.emwin_frame)
+
+        #Parent is QFrame
+        self.emwin_frame_window = EmbedWindow(self.emwin_frame)
+        lb = QLabel("My parent is this QFrame so I'm embed here and can't get out!")
+        lb.setStyleSheet("color:#333333; font-size: 15px;")
+        lb.setWordWrap(True)
+        self.emwin_frame_window.content.addWidget(lb)
+
+
         # finalize layout
         self.layout.addWidget(self.togglesw_showcase_wdt)
         self.layout.addWidget(self.stbtn_showcase_wdt)
         self.layout.addWidget(self.imgbox_showcase_wdt)
         self.layout.addWidget(self.colorpk_showcase_wdt)
         self.layout.addWidget(self.dropfile_showcase_wdt)
+        self.layout.addWidget(self.emwin_showcase_wdt)
 
         self.togglesw_showcase_wdt.show()
         self.stbtn_showcase_wdt.hide()
         self.imgbox_showcase_wdt.hide()
         self.colorpk_showcase_wdt.hide()
         self.dropfile_showcase_wdt.hide()
+        self.emwin_showcase_wdt.hide()
 
 
 
