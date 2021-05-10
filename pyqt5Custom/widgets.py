@@ -1,17 +1,19 @@
-#                PyQt5 Custom Widgets                 #
-#                    Kadir Aksoy                      #
+#                 PyQt5 Custom Widgets                #
+#                GPL 3.0 - Kadir Aksoy                #
 #   https://github.com/kadir014/pyqt5-custom-widgets  #
 
 
 import time
-import os
 from math import ceil, sin, pi, sqrt, atan2, pow
 import random
+import pathlib
 import requests
 
 from PyQt5.QtCore import Qt, QEvent, QSize, QPoint, pyqtSignal
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QAbstractButton, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
-from PyQt5.QtGui import QColor, QPainter, QPixmap, QPen, QBrush, QMovie, QImage
+from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QLabel, QAbstractButton, QPlainTextEdit, QGraphicsOpacityEffect, QGraphicsDropShadowEffect
+from PyQt5.QtGui import QColor, QPainter, QPixmap, QPen, QBrush, QMovie, QImage, QFont
+
+from .syntaxhighlighter import SyntaxHighlighter
 
 
 
@@ -73,6 +75,18 @@ class TitleBar(QWidget):
         self.parent().setWindowTitle(title)
         self.parent().setWindowFlags(Qt.FramelessWindowHint)
 
+        setattr(self.parent(), "mousePressEvent", self.parentMousePressEvent)
+        setattr(self.parent(), "mouseMoveEvent", self.parentMouseMoveEvent)
+        setattr(self.parent(), "mouseReleaseEvent", self.parentMouseReleaseEvent)
+
+        # self.event_widget = QWidget()
+        # self.event_widget.setParent(self.parent())
+        # self.event_widget.setGeometry(5, 5, self.parent().width()-10, self.parent().height()-10)
+        # self.event_widget.raise_()
+        # self.event_widget.hide()
+        #
+        # setattr(self.event_widget, "enterEvent", self.childEnterEvent)
+
         self.setFixedHeight(32)
 
         self.layout = QHBoxLayout()
@@ -130,12 +144,141 @@ class TitleBar(QWidget):
 
         self.pressing = False
 
+        self.cursize = 9
+
+        self.curs = {
+            "southeast" : (1, 1),
+            "east" : (1, 0),
+            "south" : (0, 1)
+        }
+
+        self.ccurs = {
+            "southeast" : Qt.SizeFDiagCursor,
+            "northeast" : Qt.SizeBDiagCursor,
+            "southwest" : Qt.SizeBDiagCursor,
+            "northwest" : Qt.SizeFDiagCursor,
+            "north" : Qt.SizeVerCursor,
+            "south" : Qt.SizeVerCursor,
+            "east" : Qt.SizeHorCursor,
+            "west" : Qt.SizeHorCursor,
+        }
+
     def setTitle(self, title):
         self.parent().setWindowTitle(title)
         self.title_lbl.setText(title)
 
     def title(self):
         return self.title_lbl.text()
+
+    def parentMousePressEvent(self, event):
+        self._start = self.mapToGlobal(event.pos())
+        self._orw = self.parent().width()
+        self._orh = self.parent().height()
+        self._orx = self.parent().x()
+        self._ory = self.parent().y()
+
+        if event.x() > self.parent().width() - self.cursize:
+            if event.y() > self.parent().height() - self.cursize:
+                self.cur = "southeast"
+
+            elif event.y() < self.cursize:
+                self.cur = "northeast"
+
+            else:
+                self.cur = "east"
+
+        elif event.x() < self.cursize:
+            if event.y() > self.parent().height() - self.cursize:
+                self.cur = "southwest"
+
+            elif event.y() < self.cursize:
+                self.cur = "northwest"
+
+            else:
+                self.cur = "west"
+
+        elif event.y() > self.parent().height() - self.cursize:
+            self.cur = "south"
+
+        elif event.y() < self.cursize:
+            self.cur = "north"
+
+        else:
+            self.cur = None
+
+    def parentMouseReleaseEvent(self, event):
+        self.cur = None
+        QApplication.restoreOverrideCursor()
+
+    def parentMouseMoveEvent(self, event):
+        if self.cur is not None:
+            QApplication.restoreOverrideCursor()
+            QApplication.setOverrideCursor(self.ccurs[self.cur])
+
+            end = self.mapToGlobal(event.pos())
+            self._movement = end - self._start
+
+            if self.cur in ("east", "southeast", "south"):
+                x = self._movement.x() * self.curs[self.cur][0]
+                y = self._movement.y() * self.curs[self.cur][1]
+
+                if self.parent().width() + x < self.parent().minimumWidth():
+                    end.setX(end.x()-x)
+                    x = 0
+
+                if self.parent().height() + y < self.parent().minimumHeight():
+                    end.setY(end.y()-y)
+                    y = 0
+
+                self.parent().setGeometry(self.parent().x(),
+                                          self.parent().y(),
+                                          self._orw + x,
+                                          self._orh + y)
+                self.parent().update()
+
+                self._orw += x
+                self._orh += y
+
+            elif self.cur == "northeast":
+                x = self._movement.x()
+                y = self._movement.y()
+
+                self.parent().setGeometry(self.parent().x(),
+                                          self._ory + y,
+                                          self._orw + x,
+                                          self.parent().height() - y)
+                self.parent().setFixedSize(self._orw+x, self.parent().height()-y)
+                self.parent().update()
+
+                self._orw += x
+                self._ory += y
+
+            elif self.cur == "southwest":
+                x = self._movement.x()
+                y = self._movement.y()
+
+                #if x > 2: x = 2
+                #if x < -2: x = -2
+
+                # self.parent().setFixedSize(self.parent().width()-x,
+                #                            self._orh + y)
+                #
+                # self.parent().move(self._orx - x,
+                #                    self.parent().y())
+
+                self.parent().setGeometry(self._orx - x,
+                                          self.parent().y(),
+                                          self.parent().width()-x,
+                                          self._orh + y)
+                #self.parent().update()
+
+                self._orx += x
+                self._orh += y
+                #self._ory += y
+
+            #self.parent().setGeometry(self.parent().x(), self.parent().y(), self._orw+x, self.parent().height())
+
+            self._start = end
 
     def paintEvent(self, event):
         pt = QPainter()
@@ -152,11 +295,15 @@ class TitleBar(QWidget):
         pt.end()
 
     def mousePressEvent(self, event):
-        self.start = self.mapToGlobal(event.pos())
-        self.pressing = True
+        if event.x() < self.parent().width() - 10:
+            self.start = self.mapToGlobal(event.pos())
+            self.pressing = True
+        else:
+            self.parentMousePressEvent(event)
 
     def mouseReleaseEvent(self, event):
         self.pressing = False
+        self.parentMouseReleaseEvent(event)
 
     def mouseMoveEvent(self, event):
         if self.pressing:
@@ -167,6 +314,8 @@ class TitleBar(QWidget):
                                       self.parent().width(),
                                       self.parent().height())
             self.start = end
+        else:
+            self.parentMouseMoveEvent(event)
 
 
 
@@ -271,7 +420,7 @@ class ColorPreview(QWidget):
         pt.end()
 
 
-
+# TODO: Complete optimized color wheel & picker are and cursor
 class ColorPicker(QWidget):
 
     colorChanged = pyqtSignal(QColor)
@@ -296,8 +445,6 @@ class ColorPicker(QWidget):
         pt.begin(self)
         pt.setRenderHint(QPainter.Antialiasing)
 
-        # TODO: Complete optimized color wheel & picker are and cursor
-
         for i in range(self.width()):
             for j in range(self.height()):
                 color = QColor(255, 255, 255, 255)
@@ -315,7 +462,6 @@ class ColorPicker(QWidget):
                     pt.setPen(color)
                     pt.drawPoint(i, j)
 
-
                 elif ww < i < self.width()-ww and hh < j < self.height()-hh:
                     h = 0.8
                     s = (i - ww) / (self.width()-ww*2)
@@ -328,30 +474,27 @@ class ColorPicker(QWidget):
                     pt.setPen(color)
                     pt.drawPoint(i, j)
 
-        # center = QPointF(self.width()/2, self.height()/2)
-        # p = QPainter(self)
-        # hsv_grad = QConicalGradient(center, 90)
-        # for deg in range(360):
-        #     col = QColor.fromHsvF(deg / 360, 1, self.v)
-        #     hsv_grad.setColorAt(deg / 360, col)
-        #
-        # val_grad = QRadialGradient(center, self.radius)
-        # val_grad.setColorAt(0.0, QColor.fromHsvF(0.0, 0.0, self.v, 1.0))
-        # val_grad.setColorAt(1.0, Qt.transparent)
-        #
-        # p.setPen(Qt.transparent)
-        # p.setBrush(hsv_grad)
-        # p.drawEllipse(self.rect())
-        # p.setBrush(val_grad)
-        # p.drawEllipse(self.rect())
-
         pt.end()
+
+
+
+# this is a data class which is meant to be used by DragDropFile
+class FileDetails:
+    def __init__(self, path, content):
+        self.path = path
+        self.content = content
+
+        self._path = pathlib.Path(self.path)
+
+        self.name      = self._path.name
+        self.pureName  = self._path.stem
+        self.extension = self._path.suffix
 
 
 
 class DragDropFile(QWidget):
 
-    fileDropped = pyqtSignal()
+    fileDropped = pyqtSignal(FileDetails)
 
     def __init__(self):
         super().__init__()
@@ -379,6 +522,14 @@ class DragDropFile(QWidget):
 
         self.dragEnter = False
 
+        self.file = None
+
+    def setTitle(self, title):
+        self.title_lbl.setText(title)
+
+    def getFile(self):
+        return
+
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             self.dragEnter = True
@@ -392,10 +543,12 @@ class DragDropFile(QWidget):
         self.repaint()
 
     def dropEvent(self, event):
-        filename = event.mimeData().urls()[0].toLocalFile().split("/")[-1]
-        self.filename_lbl.setText(filename)
+        mime = event.mimeData()
+        file = FileDetails(mime.urls()[0].toLocalFile(), mime.text())
 
-        self.fileDropped.emit()
+        self.filename_lbl.setText(file.name)
+
+        self.fileDropped.emit(file)
 
         self.dragEnter = False
         self.repaint()
@@ -413,6 +566,143 @@ class DragDropFile(QWidget):
             pt.setBrush(brush)
 
         pt.drawRoundedRect(self.borderWidth, self.borderWidth, self.width()-self.borderWidth*2, self.height()-self.borderWidth*2, self.borderRadius, self.borderRadius)
+
+        pt.end()
+
+
+
+class CodeTextEdit(QWidget):
+
+    LANG_DISPLAY = {
+            "plain"  : "Plain text",
+            "python" : "Python",
+            "py"     : "Python",
+            "cpp"    : "C++",
+            "c++"    : "C++"
+        }
+
+    def __init__(self):
+        super().__init__()
+
+        self.layout = QHBoxLayout()
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.layout)
+
+        self.layout.addSpacing(37)
+
+        self.editorlyt = QVBoxLayout()
+        self.editorlyt.setSpacing(0)
+        self.editorlyt.setContentsMargins(0, 0, 0, 0)
+        self.layout.addLayout(self.editorlyt)
+
+        self.editor = QPlainTextEdit()
+        self.editor.setLineWrapMode(QPlainTextEdit.NoWrap)
+        self.editorlyt.addWidget(self.editor)
+
+        self.setStyleSheet("QPlainTextEdit {font-family:Consolas; font-size:14px; color:#222222;}")
+
+        self.highlighter = SyntaxHighlighter(self.editor.document())
+
+        self.sliderVal = 0
+        self.lastdigit = 2
+        vs = self.editor.verticalScrollBar()
+
+        @vs.rangeChanged.connect
+        def slot(v):
+            self.sliderVal = self.editor.verticalScrollBar().value()
+
+            if len(str(vs.maximum()+15)) > self.lastdigit:
+                self.lastdigit = len(str(vs.maximum()+15))
+                self.layout.insertSpacing(0, 10)
+
+            self.update()
+
+        @vs.valueChanged.connect
+        def slot(v):
+            self.sliderVal = v
+
+            self.update()
+
+        self.statusbar = QWidget()
+        self.statusbar.setFixedHeight(26)
+        self.statusbarlyt = QHBoxLayout()
+        self.statusbarlyt.setContentsMargins(10, 0, 30, 0)
+        self.statusbar.setLayout(self.statusbarlyt)
+        self.editorlyt.addWidget(self.statusbar)
+
+        self.cursor_lbl = QLabel("0:0")
+        self.cursor_lbl.setStyleSheet("font-size:16px;")
+        self.statusbarlyt.addWidget(self.cursor_lbl, alignment=Qt.AlignLeft|Qt.AlignVCenter)
+
+        self.lang_lbl = QLabel("Plain text")
+        self.lang_lbl.setStyleSheet("font-size:16px;")
+        self.statusbarlyt.addWidget(self.lang_lbl, alignment=Qt.AlignRight|Qt.AlignVCenter)
+
+        @self.editor.cursorPositionChanged.connect
+        def slot():
+            self.cursor_lbl.setText(f"{self.editor.textCursor().blockNumber()}:{self.editor.textCursor().positionInBlock()}")
+
+    def setTheme(self, theme):
+        self.highlighter.setTheme(theme)
+        self.highlighter.setRules()
+
+        c = self.highlighter.theme["background"]
+        rgb = f"rgb({c.red()}, {c.green()}, {c.blue()})"
+
+        cc = self.highlighter.theme["identifier"]
+        crgb = f"rgb({cc.red()}, {cc.green()}, {cc.blue()})"
+
+        self.editor.setStyleSheet(f"QPlainTextEdit {{background-color: {rgb}; color: {crgb};}}")
+
+        self.cursor_lbl.setStyleSheet(f"color: {crgb}; font-size:16px;")
+        self.lang_lbl.setStyleSheet(f"color: {crgb}; font-size:16px;")
+
+        self.highlighter.rehighlight()
+        self.update()
+
+    def setLang(self, lang):
+        self.lang_lbl.setText(CodeTextEdit.LANG_DISPLAY[lang])
+
+        self.highlighter.setLang(lang)
+        self.highlighter.setRules()
+        self.highlighter.rehighlight()
+        self.update()
+
+    def loadFile(self, filepath, encoding="utf-8"):
+
+        if filepath.endswith(".py"): lang = "python"
+        elif filepath.endswith(".cpp"): lang = "cpp"
+        else: lang = "plain"
+
+        with open(filepath, "r", encoding=encoding) as f:
+            self.editor.setPlainText(f.read())
+
+        self.setLang(lang)
+
+    def paintEvent(self, event):
+        pt = QPainter()
+        pt.begin(self)
+        pt.setRenderHint(QPainter.Antialiasing)
+
+        pt.setBrush(QBrush(self.highlighter.theme["lines-background"]))
+
+        pt.drawRect(0, 0, self.width(), self.height())
+
+        font = self.editor.font()
+        pt.setFont(font)
+
+        gap = font.pixelSize() + 3
+
+        for i in range((self.height()//gap)):
+            font = pt.font()
+            pt.setFont(font)
+            pt.setPen(QPen(self.highlighter.theme["lines"]))
+
+            pt.drawText(13, i*gap, str(i+self.sliderVal))
+
+        pt.setBrush(QBrush(self.highlighter.theme["background"]))
+        pt.setPen(QPen(QColor(0, 0, 0, 0)))
+        pt.drawRect(3, self.height()-self.statusbar.height(), 40, self.statusbar.height()-6)
 
         pt.end()
 
@@ -467,7 +757,7 @@ class EmbedWindow(QWidget):
         self.title = QLabel("New window")
         self.title.setStyleSheet("color:white; font-size:14px; font-family:Montserrat-Regular;")
 
-        self.close_btn = StyledButton("X")
+        self.close_btn = StyledButton("✕")
         self.close_btn.opacity.setOpacity(0.999)
         self.close_btn.setFixedSize(self.headerHeight, self.headerHeight)
         self.close_btn.setStyleSheet("color:white; font-size:17px;")
@@ -585,7 +875,6 @@ class EmbedWindow(QWidget):
         pt.end()
 
         if not self.anim.done(): self.update()
-
 
 
 

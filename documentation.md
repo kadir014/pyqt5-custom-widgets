@@ -6,6 +6,10 @@ Here is the list of currently implemented widgets
 - [ImageBox](#ImageBox)
 - [ColorPicker](#ColorPicker)
 - [DragDropFile](#DragDropFile)
+- [EmbedWindow](#DEmbedWindow)
+- [CodeTextEdit](#CodeTextEdit)
+- [TitleBar](#TitleBar)
+- [Misc](#misc)
 
 
 
@@ -71,12 +75,12 @@ Here is the list of currently implemented widgets
 ![DragDropFile](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/dropfileshowcase.gif)
 
 #### Signals
-- `fileDropped` : This signal is emitted when a file is dropped on widget
+- `fileDropped(file)` FileDetails : This signal is emitted when a file is dropped on widget
 
 ## EmbedWindow
 `EmbedWindow` is a dialog window which is not a popup, it is embedded onto the parent widget \
 \
-![EmbedWindow](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/embedwindow.png)
+![EmbedWindow](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/embedwindowshowcase.gif)
 
 #### Parameters
 - `parent` (QWidget) : Parent widget of the window
@@ -87,3 +91,62 @@ Here is the list of currently implemented widgets
 #### Methods
 - `setTitle(title)` : Change title of the window
 - `setControlsVisible(bool)` : Change visibility of control buttons
+
+## CodeTextEdit
+`CodeTextEdit` is simply a code editor. It's a multiline text area with syntax highlighting, it only supports few languages for now. For details see [SyntaxHighlighter](#SyntaxHighlighter) \
+\
+![CodeTextEdit](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/codetextshowcase.gif)
+
+#### Methods
+- `setTheme(theme)` : Change syntax coloring theme
+- `setLang(lang)` : Change language syntax
+- `loadFile(filepath)` : Load file content into editor
+
+## TitleBar
+`TitleBar` lets the developer use a custom window title bar, this widget also provides window resizing controls (WIP) \
+\
+![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.png)
+
+#### Parameters
+- `parent` (QWidget) : Parent widget of the window
+- `title` (str) : Title of the window (Optional)
+
+#### Attributes
+- `close_btn` (StyledButton) : Close button
+- `max_btn` (StyledButton) : Maximize button
+- `min_btn` (StyledButton) : Minimize button
+
+#### Methods
+- `setTitle(title)` : Change title
+- `title()` (str) : Get title
+
+
+# Misc
+Other stuff _(which you mostly don't need to know they existed)_ included within the module other than custom widgets
+- [FileDetails](#FileDetails)
+- [ColorPreview](#ColorPreview)
+- [SyntaxHighlighter](#SyntaxHighlighter)
+- [Animation](#Animation)
+- [AnimationHandler](#AnimationHandler)
+
+## FileDetails
+`FileDetails` object is a data class which is meant to be used by `DragDropFile` for `fileDropped` signal
+
+#### Attributes
+- `path` (str) : File's path
+- `content` (str) : Content of the file
+- `name` (str) : File's name
+- `pureName` (str) : File's name without the extension
+- `extension` (str) : File's extension
+
+## ColorPreview
+`ColorPreview` is a widget to display some color. It can bee seen used next to ColorPicker example. But this widget is most likely going to be deprecated
+
+## SyntaxHighlighter
+`SyntaxHighlighter` inherits `QSyntaxHighlighter`, it's only purpose is to serve `CodeTextEdit` widget. `pyqt5Custom` module currently (version 0.0.4) supports only Python and C++ syntax highlighting.
+
+## Animation
+`Animation` is just a static class holding easing animation functions. This class is most likely going to be deprecated when I rework animations.
+
+## AnimationHandler
+`AnimationHandler` animates widget's properties using `Animation` class's functions. This class is most likely going to be deprecated when I rework animations.

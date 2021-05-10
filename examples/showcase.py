@@ -1,6 +1,8 @@
-#        PyQt5 Custom Widgets - Showcase Demo         #
-#                    Kadir Aksoy                      #
+#                 PyQt5 Custom Widgets                #
+#                GPL 3.0 - Kadir Aksoy                #
 #   https://github.com/kadir014/pyqt5-custom-widgets  #
+#                                                     #
+#    This script is one of the pyqt5Custom examples   #
 
 
 import sys
@@ -9,7 +11,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 from PyQt5.QtGui import QColor, QFontDatabase
 
-from customwidgets import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile, EmbedWindow
+from pyqt5Custom import TitleBar, ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile, EmbedWindow, CodeTextEdit
 
 
 
@@ -23,6 +25,8 @@ class MainWindow(QWidget):
         self.setWindowTitle("PyQt5 Custom Widgets Showcase")
 
         QFontDatabase.addApplicationFont("data/Montserrat-Regular.ttf")
+        QFontDatabase.addApplicationFont("data/SourceCodePro-Regular.ttf")
+
         self.setStyleSheet("QLabel {font-family: Montserrat-Regular;}")
 
         self.setAutoFillBackground(True)
@@ -31,9 +35,18 @@ class MainWindow(QWidget):
         self.setPalette(p)
 
 
+        self.mainlayout = QVBoxLayout()
+        self.mainlayout.setSpacing(0)
+        self.mainlayout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.mainlayout)
+
+        self.titlebar = TitleBar(self, title="PyQt5 Custom Widgets Showcase")
+        self.titlebar.setStyleSheet("QLabel {color:white; font-size:13px; font-family: Montserrat-Regular;}")
+        self.mainlayout.addWidget(self.titlebar)
+
         self.layout = QHBoxLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
-        self.setLayout(self.layout)
+        self.mainlayout.addLayout(self.layout)
 
         # Side menu
         self.menu_wdt = QWidget()
@@ -55,6 +68,7 @@ class MainWindow(QWidget):
         self.menubtn4 = StyledButton(icon="data/colorpckicon.png")
         self.menubtn5 = StyledButton(icon="data/dragdropicon.png")
         self.menubtn6 = StyledButton(icon="data/windowicon.png")
+        self.menubtn7 = StyledButton(icon="data/codeicon.png")
 
         self.menubtn1.resize(70, 70)
         self.menubtn1.setIconSize(40, 40)
@@ -110,6 +124,15 @@ class MainWindow(QWidget):
         self.menubtn6.hoverLighter = True
         self.menubtn6.hoverFactor = 3.8
 
+        self.menubtn7.setFixedSize(70, 70)
+        self.menubtn7.setIconSize(40, 40)
+        self.menubtn7.borderColor = QColor(245, 66, 126)
+        self.menubtn7.backgroundColor = QColor(245, 66, 126)
+        self.menubtn7.circleColor = self.menubtn4.borderColor.lighter(146)
+        self.menubtn7.borderRadius = 14
+        self.menubtn7.hoverLighter = True
+        self.menubtn7.hoverFactor = 3.8
+
         self.menu.addSpacing(10)
         self.menu.addWidget(self.menubtn1, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn2, alignment=Qt.AlignTop|Qt.AlignCenter)
@@ -117,6 +140,7 @@ class MainWindow(QWidget):
         self.menu.addWidget(self.menubtn4, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn5, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn6, alignment=Qt.AlignTop|Qt.AlignCenter)
+        self.menu.addWidget(self.menubtn7, alignment=Qt.AlignTop|Qt.AlignCenter)
 
         @self.menubtn1.clicked.connect
         def slot():
@@ -126,6 +150,7 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
 
         @self.menubtn2.clicked.connect
         def slot():
@@ -135,6 +160,7 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
 
         @self.menubtn3.clicked.connect
         def slot():
@@ -144,6 +170,7 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
 
         @self.menubtn4.clicked.connect
         def slot():
@@ -153,6 +180,7 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.show()
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
 
         @self.menubtn5.clicked.connect
         def slot():
@@ -162,6 +190,7 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.show()
             self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
 
         @self.menubtn6.clicked.connect
         def slot():
@@ -171,6 +200,17 @@ class MainWindow(QWidget):
             self.colorpk_showcase_wdt.hide()
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.show()
+            self.codeedit_showcase_wdt.hide()
+
+        @self.menubtn7.clicked.connect
+        def slot():
+            self.togglesw_showcase_wdt.hide()
+            self.stbtn_showcase_wdt.hide()
+            self.imgbox_showcase_wdt.hide()
+            self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.show()
 
 
         ##################################################
@@ -493,6 +533,70 @@ class MainWindow(QWidget):
         self.emwin_frame_window.content.addWidget(lb)
 
 
+        ##################################################
+        #                                                #
+        #              CodeTextEdit Widget               #
+        #                                                #
+        ##################################################
+
+        self.codeedit_showcase_wdt = QWidget()
+        self.codeedit_showcase_lyt = QVBoxLayout()
+        self.codeedit_showcase_lyt.setSpacing(5)
+        self.codeedit_showcase_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
+        self.codeedit_showcase_wdt.setLayout(self.codeedit_showcase_lyt)
+
+        self.codeedit_showcase_lyt.addWidget(QLabel("<span style='font-size:30px;'>Code Editor</span>"),
+                                           alignment=Qt.AlignHCenter)
+        self.codeedit_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>CodeTextEdit widget is simply a syntax-highlighted editor</span>"),
+                                           alignment=Qt.AlignHCenter)
+        self.codeedit_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>Currently it only supports few languages</span>"),
+                                           alignment=Qt.AlignHCenter)
+
+        self.codeedit_showcase_lyt.addSpacing(34)
+
+        self.codeedit_filedrop = DragDropFile()
+        self.codeedit_filedrop.setTitle("Drop source file")
+        self.codeedit_filedrop.setFixedSize(410, 64)
+        self.codeedit_filedrop.borderRadius = 6
+        self.codeedit_filedrop.borderWidth = 3
+        self.codeedit_showcase_lyt.addWidget(self.codeedit_filedrop, alignment=Qt.AlignHCenter)
+
+        self.codeedit_showcase_lyt.addSpacing(59)
+
+        @self.codeedit_filedrop.fileDropped.connect
+        def slot(file):
+            self.codeedit.loadFile(file.path)
+
+        self.codeedit = CodeTextEdit()
+        self.codeedit.setFixedSize(384, 200)
+        self.codeedit.setStyleSheet("QPlainTextEdit {font-size:14px; font-family: SourceCodePro-Regular;}")
+        self.codeedit.loadFile("example.cpp")
+        self.codeedit_showcase_lyt.addWidget(self.codeedit, alignment=Qt.AlignHCenter|Qt.AlignTop)
+        self.codeedit_showcase_lyt.addSpacing(59)
+        self.codeedit_themes_lyt = QHBoxLayout()
+        self.codeedit_showcase_lyt.addLayout(self.codeedit_themes_lyt)
+
+        self.codeedit_themebtn1 = StyledButton("Default", style="hyper")
+        self.codeedit_themebtn1.setStyleSheet("font-size: 15px;")
+        self.codeedit_themebtn1.setFixedHeight(30)
+
+        self.codeedit_themebtn2 = StyledButton("One Dark", style="hyper")
+        self.codeedit_themebtn2.setStyleSheet("font-size: 15px;")
+        self.codeedit_themebtn2.setFixedHeight(30)
+
+        self.codeedit_themebtn3 = StyledButton("Monokai", style="hyper")
+        self.codeedit_themebtn3.setStyleSheet("font-size: 15px;")
+        self.codeedit_themebtn3.setFixedHeight(30)
+
+        self.codeedit_themebtn1.clicked.connect(lambda: self.codeedit.setTheme("default"))
+        self.codeedit_themebtn2.clicked.connect(lambda: self.codeedit.setTheme("one-dark"))
+        self.codeedit_themebtn3.clicked.connect(lambda: self.codeedit.setTheme("material-monokai"))
+
+        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn1)
+        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn2)
+        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn3)
+
+
         # finalize layout
         self.layout.addWidget(self.togglesw_showcase_wdt)
         self.layout.addWidget(self.stbtn_showcase_wdt)
@@ -500,6 +604,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.colorpk_showcase_wdt)
         self.layout.addWidget(self.dropfile_showcase_wdt)
         self.layout.addWidget(self.emwin_showcase_wdt)
+        self.layout.addWidget(self.codeedit_showcase_wdt)
 
         self.togglesw_showcase_wdt.show()
         self.stbtn_showcase_wdt.hide()
@@ -507,6 +612,7 @@ class MainWindow(QWidget):
         self.colorpk_showcase_wdt.hide()
         self.dropfile_showcase_wdt.hide()
         self.emwin_showcase_wdt.hide()
+        self.codeedit_showcase_wdt.hide()
 
 
 
