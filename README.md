@@ -4,12 +4,12 @@
   <img src="https://img.shields.io/badge/license-GPL%203.0-blue.svg">
   <img src="https://img.shields.io/badge/version-0.0.4-orange">
 </p>
-More useful and stylish widgets for PyQt5 such as toggle switches, animated buttons, etc.. \
-\
-![showcase](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/showcase.gif) \
-\
+More useful and stylish widgets for PyQt5 such as toggle switches, animated buttons, etc.. 
+<br>
+<img src="https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/showcase.gif" width="500"> 
+
 **DISCLAIMER:** \
-Currently most widgets can't use style sheets properly so you have to use attributes to stylize them. I'm planning to remove this inconvenience and make their usage as close as to base Qt widgets in the next update.
+Currently most widgets can't use style sheets properly so you have to use attributes to stylize them. I'm working on removing this inconvenience and make their usage as close as to base Qt widgets
 
 ## Table of Contents
 - [Installing](#Installing)
