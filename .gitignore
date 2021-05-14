@@ -1,2 +1,5 @@
 __pycache__/
 dev/
+dist/
+olddist/
+pyqt5Custom.egg-info/

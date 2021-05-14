@@ -9,8 +9,17 @@ Here is the list of currently implemented widgets
 - [EmbedWindow](#DEmbedWindow)
 - [CodeTextEdit](#CodeTextEdit)
 - [TitleBar](#TitleBar)
-- [Misc](#misc)
+- [Spinner](#Spinner)
+- [Toast](#Toast)
 
+## Other stuff
+Other stuff that the the library provides but are not mainly widgets. Some are tools, data classes, etc...
+- [RequestHandler](#RequestHandler)
+- [FileDetails](#FileDetails)
+- [Animation](#Animation)
+- [AnimationHandler](#AnimationHandler)
+- [ColorPreview](#ColorPreview)
+- [SyntaxHighlighter](#SyntaxHighlighter)
 
 
 ## ToggleSwitch
@@ -121,13 +130,21 @@ Here is the list of currently implemented widgets
 - `title()` (str) : Get title
 
 
-# Misc
-Other stuff _(which you mostly don't need to know they existed)_ included within the module other than custom widgets
-- [FileDetails](#FileDetails)
-- [ColorPreview](#ColorPreview)
-- [SyntaxHighlighter](#SyntaxHighlighter)
-- [Animation](#Animation)
-- [AnimationHandler](#AnimationHandler)
+# Other stuff
+Other stuff that the the library provides but are not mainly widgets. Some are tools, data classes, etc...
+
+## RequestHandler
+`RequestHandler` is a thread (QThread) that can be used to handle HTTP requests while avoiding blocking Qt's event loop. You can see [Examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/) to see usage of this class.
+
+#### Methods
+- `newRequest(method, url, headers, data)`
+  - `method` (str) : Request method
+  - `url` (str) : Address where request will be sent at
+  - `headers` (dict) : Request headers
+  - `data` (dict) : Request data
+
+#### Signals
+- `requestResponded` : Emitted when a requeest in the current pool gets responded. Response is a [requests.Response](https://docs.python-requests.org/en/latest/api/#requests.Response) object
 
 ## FileDetails
 `FileDetails` object is a data class which is meant to be used by `DragDropFile` for `fileDropped` signal
@@ -139,14 +156,14 @@ Other stuff _(which you mostly don't need to know they existed)_ included within
 - `pureName` (str) : File's name without the extension
 - `extension` (str) : File's extension
 
-## ColorPreview
-`ColorPreview` is a widget to display some color. It can bee seen used next to ColorPicker example. But this widget is most likely going to be deprecated
-
-## SyntaxHighlighter
-`SyntaxHighlighter` inherits `QSyntaxHighlighter`, it's only purpose is to serve `CodeTextEdit` widget. `pyqt5Custom` module currently (version 0.0.4) supports only Python and C++ syntax highlighting.
-
 ## Animation
 `Animation` is just a static class holding easing animation functions. This class is most likely going to be deprecated when I rework animations.
 
 ## AnimationHandler
 `AnimationHandler` animates widget's properties using `Animation` class's functions. This class is most likely going to be deprecated when I rework animations.
+
+## ColorPreview
+`ColorPreview` is a widget to display some color. It can bee seen used next to ColorPicker example. But this widget is most likely going to be deprecated
+
+## SyntaxHighlighter
+`SyntaxHighlighter` inherits `QSyntaxHighlighter`, it's only purpose is to serve `CodeTextEdit` widget. `pyqt5Custom` module currently supports only Python and C++ syntax highlighting.

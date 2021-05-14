@@ -1,5 +1,5 @@
-#                 PyQt5 Custom Widgets                #
-#                GPL 3.0 - Kadir Aksoy                #
+#        PyQt5 Custom Widgets - Showcase Demo         #
+#                    Kadir Aksoy                      #
 #   https://github.com/kadir014/pyqt5-custom-widgets  #
 #                                                     #
 #    This script is one of the pyqt5Custom examples   #
@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QApplication, QHBoxLayout, QVBoxLayout, QLabel, QFrame
 from PyQt5.QtGui import QColor, QFontDatabase
 
-from pyqt5Custom import TitleBar, ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile, EmbedWindow, CodeTextEdit
+from pyqt5Custom import ToggleSwitch, StyledButton, ImageBox, ColorPicker, ColorPreview, DragDropFile, EmbedWindow, TitleBar, CodeTextEdit, Spinner, SegmentedButtonGroup
 
 
 
@@ -20,18 +20,18 @@ class MainWindow(QWidget):
         super().__init__()
 
         w, h = 950, 630
-        self.setMinimumSize(w, h)
+        self.setMinimumSize(w//6, h//6)
         self.setGeometry(100, 100, w, h)
-        self.setWindowTitle("PyQt5 Custom Widgets Showcase")
 
         QFontDatabase.addApplicationFont("data/Montserrat-Regular.ttf")
         QFontDatabase.addApplicationFont("data/SourceCodePro-Regular.ttf")
+        QFontDatabase.addApplicationFont("data/SFPro.ttf")
 
         self.setStyleSheet("QLabel {font-family: Montserrat-Regular;}")
 
         self.setAutoFillBackground(True)
         p = self.palette()
-        p.setColor(self.backgroundRole(), QColor(252, 252, 252))
+        p.setColor(self.backgroundRole(), QColor(254, 254, 254))
         self.setPalette(p)
 
 
@@ -41,7 +41,11 @@ class MainWindow(QWidget):
         self.setLayout(self.mainlayout)
 
         self.titlebar = TitleBar(self, title="PyQt5 Custom Widgets Showcase")
-        self.titlebar.setStyleSheet("QLabel {color:white; font-size:13px; font-family: Montserrat-Regular;}")
+        self.titlebar.setStyleDict({
+            "color" : (0, 0, 0, 0),
+            "font-family" : "Montserrat-Regular",
+            "font-size" : 14
+        })
         self.mainlayout.addWidget(self.titlebar)
 
         self.layout = QHBoxLayout()
@@ -69,69 +73,51 @@ class MainWindow(QWidget):
         self.menubtn5 = StyledButton(icon="data/dragdropicon.png")
         self.menubtn6 = StyledButton(icon="data/windowicon.png")
         self.menubtn7 = StyledButton(icon="data/codeicon.png")
+        self.menubtn8 = StyledButton(icon="data/spinnericon.png")
 
-        self.menubtn1.resize(70, 70)
+        w, i = 60, 30
+
+        self.menubtn1.setFixedSize(w, w)
         self.menubtn1.setIconSize(40, 40)
-        self.menubtn1.borderColor = QColor(245, 66, 126)
-        self.menubtn1.backgroundColor = QColor(245, 66, 126)
-        self.menubtn1.circleColor = self.menubtn1.borderColor.lighter(146)
-        self.menubtn1.borderRadius = 14
-        self.menubtn1.hoverLighter = True
-        self.menubtn1.hoverFactor = 3.8
+        self.menubtn1.setStyleDict({
+            "background-color" : (245, 66, 126),
+            "border-color" : (0, 0, 0, 0),
+            "border-radius" : 14
+        })
+        self.menubtn1.setStyleDict({
+            "background-color" : (245, 127, 167),
+        }, "hover")
+        self.menubtn1.setStyleDict({
+            "background-color" : (255, 156, 189),
+        }, "press")
 
-        self.menubtn2.resize(70, 70)
-        self.menubtn2.setIconSize(40, 40)
-        self.menubtn2.borderColor = QColor(245, 66, 126)
-        self.menubtn2.backgroundColor = QColor(245, 66, 126)
-        self.menubtn2.circleColor = self.menubtn2.borderColor.lighter(146)
-        self.menubtn2.borderRadius = 14
-        self.menubtn2.hoverLighter = True
-        self.menubtn2.hoverFactor = 3.8
+        self.menubtn2.setFixedSize(w, w)
+        self.menubtn2.setIconSize(i, i)
+        self.menubtn2.copyStyleDict(self.menubtn1)
 
-        self.menubtn3.resize(70, 70)
-        self.menubtn3.setIconSize(40, 40)
-        self.menubtn3.borderColor = QColor(245, 66, 126)
-        self.menubtn3.backgroundColor = QColor(245, 66, 126)
-        self.menubtn3.circleColor = self.menubtn3.borderColor.lighter(146)
-        self.menubtn3.borderRadius = 14
-        self.menubtn3.hoverLighter = True
-        self.menubtn3.hoverFactor = 3.8
+        self.menubtn3.setFixedSize(w, w)
+        self.menubtn3.setIconSize(i, i)
+        self.menubtn3.copyStyleDict(self.menubtn1)
 
-        self.menubtn4.resize(70, 70)
-        self.menubtn4.setIconSize(40, 40)
-        self.menubtn4.borderColor = QColor(245, 66, 126)
-        self.menubtn4.backgroundColor = QColor(245, 66, 126)
-        self.menubtn4.circleColor = self.menubtn4.borderColor.lighter(146)
-        self.menubtn4.borderRadius = 14
-        self.menubtn4.hoverLighter = True
-        self.menubtn4.hoverFactor = 3.8
+        self.menubtn4.setFixedSize(w, w)
+        self.menubtn4.setIconSize(i, i)
+        self.menubtn4.copyStyleDict(self.menubtn1)
 
-        self.menubtn5.resize(70, 70)
-        self.menubtn5.setIconSize(40, 40)
-        self.menubtn5.borderColor = QColor(245, 66, 126)
-        self.menubtn5.backgroundColor = QColor(245, 66, 126)
-        self.menubtn5.circleColor = self.menubtn4.borderColor.lighter(146)
-        self.menubtn5.borderRadius = 14
-        self.menubtn5.hoverLighter = True
-        self.menubtn5.hoverFactor = 3.8
+        self.menubtn5.setFixedSize(w, w)
+        self.menubtn5.setIconSize(i, i)
+        self.menubtn5.copyStyleDict(self.menubtn1)
 
-        self.menubtn6.resize(70, 70)
-        self.menubtn6.setIconSize(40, 40)
-        self.menubtn6.borderColor = QColor(245, 66, 126)
-        self.menubtn6.backgroundColor = QColor(245, 66, 126)
-        self.menubtn6.circleColor = self.menubtn4.borderColor.lighter(146)
-        self.menubtn6.borderRadius = 14
-        self.menubtn6.hoverLighter = True
-        self.menubtn6.hoverFactor = 3.8
+        self.menubtn6.setFixedSize(w, w)
+        self.menubtn6.setIconSize(i, i)
+        self.menubtn6.copyStyleDict(self.menubtn1)
 
-        self.menubtn7.setFixedSize(70, 70)
-        self.menubtn7.setIconSize(40, 40)
-        self.menubtn7.borderColor = QColor(245, 66, 126)
-        self.menubtn7.backgroundColor = QColor(245, 66, 126)
-        self.menubtn7.circleColor = self.menubtn4.borderColor.lighter(146)
-        self.menubtn7.borderRadius = 14
-        self.menubtn7.hoverLighter = True
-        self.menubtn7.hoverFactor = 3.8
+        self.menubtn7.setFixedSize(w, w)
+        self.menubtn7.setIconSize(i, i)
+        self.menubtn7.copyStyleDict(self.menubtn1)
+
+        self.menubtn8.setFixedSize(w, w)
+        self.menubtn8.setIconSize(i, i)
+        self.menubtn8.copyStyleDict(self.menubtn1)
 
         self.menu.addSpacing(10)
         self.menu.addWidget(self.menubtn1, alignment=Qt.AlignTop|Qt.AlignCenter)
@@ -141,6 +127,7 @@ class MainWindow(QWidget):
         self.menu.addWidget(self.menubtn5, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn6, alignment=Qt.AlignTop|Qt.AlignCenter)
         self.menu.addWidget(self.menubtn7, alignment=Qt.AlignTop|Qt.AlignCenter)
+        self.menu.addWidget(self.menubtn8, alignment=Qt.AlignTop|Qt.AlignCenter)
 
         @self.menubtn1.clicked.connect
         def slot():
@@ -151,6 +138,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn2.clicked.connect
         def slot():
@@ -161,6 +149,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn3.clicked.connect
         def slot():
@@ -171,6 +160,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn4.clicked.connect
         def slot():
@@ -181,6 +171,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn5.clicked.connect
         def slot():
@@ -191,6 +182,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.show()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn6.clicked.connect
         def slot():
@@ -201,6 +193,7 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.show()
             self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.hide()
 
         @self.menubtn7.clicked.connect
         def slot():
@@ -211,6 +204,18 @@ class MainWindow(QWidget):
             self.dropfile_showcase_wdt.hide()
             self.emwin_showcase_wdt.hide()
             self.codeedit_showcase_wdt.show()
+            self.spinner_showcase_wdt.hide()
+
+        @self.menubtn8.clicked.connect
+        def slot():
+            self.togglesw_showcase_wdt.hide()
+            self.stbtn_showcase_wdt.hide()
+            self.imgbox_showcase_wdt.hide()
+            self.colorpk_showcase_wdt.hide()
+            self.dropfile_showcase_wdt.hide()
+            self.emwin_showcase_wdt.hide()
+            self.codeedit_showcase_wdt.hide()
+            self.spinner_showcase_wdt.show()
 
 
         ##################################################
@@ -331,43 +336,132 @@ class MainWindow(QWidget):
         self.stbtn_style1_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
         self.stbtn_style1_lyt.setSpacing(15)
         self.stbtn_content_lyt.addLayout(self.stbtn_style1_lyt)
+
         self.stbtn_style2_lyt = QVBoxLayout()
         self.stbtn_style2_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
         self.stbtn_style2_lyt.setSpacing(15)
         self.stbtn_content_lyt.addLayout(self.stbtn_style2_lyt)
 
-        # Flat styled button
-        self.stbtn_style1_lyt.addWidget(QLabel("<span style='font-size:20px;'>Flat</span>"),
+        self.stbtn_style3_lyt = QVBoxLayout()
+        self.stbtn_style3_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
+        self.stbtn_style3_lyt.setSpacing(15)
+        self.stbtn_content_lyt.addLayout(self.stbtn_style3_lyt)
+
+
+        self.stbtn_style1_lyt.addWidget(QLabel("<span style='font-size:20px;'>Default style</span>"),
                                         alignment=Qt.AlignHCenter)
         self.stbtn_style1_lyt.addSpacing(35)
 
-        self.stbtn_style1      = StyledButton(text="Flat styled", style="flat")
-        self.stbtn_style1_icon = StyledButton(text="Icon",        style="flat", icon="data/homeicon.png")
-        self.stbtn_style1_shad = StyledButton(text="Drop shadow", style="flat")
-        self.stbtn_style1_di   = StyledButton(text="Disabled",    style="flat")
-        self.stbtn_style1_shad.setDropShadow(True)
-        self.stbtn_style1_di.setEnabled(False)
+        self.stbtn_style1      = StyledButton(text="Button")
+        self.stbtn_style1_icon = StyledButton(text="Icon", icon="data/homeicon.png")
+        self.stbtn_style1_spn = StyledButton(text="Spinner", icon=Spinner(2, QColor(0, 0, 0)))
+        self.stbtn_style1_shad = StyledButton(text="Drop shadow")
+        self.stbtn_style1_shad.setStyleDict({
+                "drop-shadow-radius" : 7,
+                "drop-shadow-offset" : (0, 2)
+            })
 
         self.stbtn_style1_lyt.addWidget(self.stbtn_style1)
         self.stbtn_style1_lyt.addWidget(self.stbtn_style1_icon)
+        self.stbtn_style1_lyt.addWidget(self.stbtn_style1_spn)
         self.stbtn_style1_lyt.addWidget(self.stbtn_style1_shad)
-        self.stbtn_style1_lyt.addWidget(self.stbtn_style1_di)
 
-        # Hyper styled button
-        self.stbtn_style2_lyt.addWidget(QLabel("<span style='font-size:20px;'>Hyper</span>"),
+
+        self.stbtn_style2_lyt.addWidget(QLabel("<span style='font-size:20px;'>Shadow interactions</span>"),
                                         alignment=Qt.AlignHCenter)
         self.stbtn_style2_lyt.addSpacing(35)
 
-        self.stbtn_style2      = StyledButton(text="Hyper styled", style="hyper")
-        self.stbtn_style2_icon = StyledButton(text="Icon",         style="hyper", icon="data/homeicon.png")
-        self.stbtn_style2_shad = StyledButton(text="Fixed bottom", style="hyper", fixedBottom=True)
-        self.stbtn_style2_di   = StyledButton(text="Disabled",     style="hyper", fixedBottom=True)
-        self.stbtn_style2_di.setEnabled(False)
+        self.stbtn_style2_1 = StyledButton(text="Shadow on hover")
+        self.stbtn_style2_2 = StyledButton(text="Shadow on press")
+        self.stbtn_style2_3 = StyledButton(text="Shadow on idle")
+        self.stbtn_style2_4 = StyledButton(text="Changing offset")
 
-        self.stbtn_style2_lyt.addWidget(self.stbtn_style2)
-        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_icon)
-        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_shad)
-        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_di)
+        self.stbtn_style2_1.setStyleDict({
+            "drop-shadow-radius" : 10,
+            "drop-shadow-offset" : (0, 3)
+        }, "hover")
+
+        self.stbtn_style2_2.setStyleDict({
+            "drop-shadow-radius" : 10,
+            "drop-shadow-offset" : (0, 3)
+        }, "press")
+
+        self.stbtn_style2_3.setStyleDict({
+            "drop-shadow-radius" : 10,
+            "drop-shadow-offset" : (0, 3)
+        }, "default")
+
+        self.stbtn_style2_4.setStyleDict({
+            "drop-shadow-radius" : 10,
+            "drop-shadow-offset" : (0, 3)
+        })
+        self.stbtn_style2_4.setStyleDict({
+            "drop-shadow-offset" : (3, 0)
+        }, "hover")
+        self.stbtn_style2_4.setStyleDict({
+            "drop-shadow-offset" : (-1.5, -1.5)
+        }, "press")
+
+        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_1)
+        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_2)
+        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_3)
+        self.stbtn_style2_lyt.addWidget(self.stbtn_style2_4)
+
+
+        self.stbtn_style3_lyt.addWidget(QLabel("<span style='font-size:20px;'>Variations</span>"),
+                                        alignment=Qt.AlignHCenter)
+        self.stbtn_style3_lyt.addSpacing(35)
+
+        self.stbtn_style3_1 = StyledButton(text="iOS styled")
+        self.stbtn_style3_2 = StyledButton(text="Pill shaped")
+        self.stbtn_style3_3 = StyledButton(text="✕")
+        self.stbtn_style3_4 = StyledButton(text="Only text")
+
+        self.stbtn_style3_1.setStyleDict({
+            "border-radius" : 4,
+            "border-color" : (0, 122, 255),
+            "color" : (0, 122, 255)
+        })
+        self.stbtn_style3_1.setStyleDict({
+            "background-color" : (255, 255, 255),
+            "border-color" : (0, 172, 255),
+            "color" : (0, 172, 255)
+        }, "hover")
+        self.stbtn_style3_1.setStyleDict({
+            "background-color" : (0, 122, 255),
+            "border-color" : (0, 122, 255),
+            "color" : (255, 255, 255)
+        }, "press")
+
+        self.stbtn_style3_2.setStyleDict({
+            "border-radius" : 100
+        })
+
+        self.stbtn_style3_3.setFixedSize(52, 52)
+        self.stbtn_style3_3.setStyleDict({
+            "border-radius" : 100,
+            "border-color" : (0, 0, 0, 0),
+            "background-color" : (241, 241, 241),
+            "font-size" : 24
+        })
+        self.stbtn_style3_3.setStyleDict({
+            "background-color": (200, 0, 0),
+            "color" : (255, 255, 255)
+        }, "hover")
+        self.stbtn_style3_3.setStyleDict({
+            "background-color": (255, 0, 0),
+            "color" : (255, 255, 255)
+        }, "press")
+
+        self.stbtn_style3_4.setStyleDict({
+            "border-color" : (0, 0, 0, 0),
+            "background-color" : (0, 0, 0, 0)
+        })
+
+        self.stbtn_style3_lyt.addWidget(self.stbtn_style3_1)
+        self.stbtn_style3_lyt.addWidget(self.stbtn_style3_2)
+        self.stbtn_style3_lyt.addWidget(self.stbtn_style3_3)
+        self.stbtn_style3_lyt.addWidget(self.stbtn_style3_4)
 
 
         ##################################################
@@ -561,40 +655,145 @@ class MainWindow(QWidget):
         self.codeedit_filedrop.borderWidth = 3
         self.codeedit_showcase_lyt.addWidget(self.codeedit_filedrop, alignment=Qt.AlignHCenter)
 
-        self.codeedit_showcase_lyt.addSpacing(59)
+        self.codeedit_showcase_lyt.addSpacing(9)
 
         @self.codeedit_filedrop.fileDropped.connect
         def slot(file):
             self.codeedit.loadFile(file.path)
 
         self.codeedit = CodeTextEdit()
-        self.codeedit.setFixedSize(384, 200)
-        self.codeedit.setStyleSheet("QPlainTextEdit {font-size:14px; font-family: SourceCodePro-Regular;}")
+        self.codeedit.setFixedSize(510, 300)
+        self.codeedit.setStyleSheet("QPlainTextEdit {font-size:17px; font-family: Source Code Pro;}")
         self.codeedit.loadFile("example.cpp")
+        self.codeedit.setTheme("one-dark")
         self.codeedit_showcase_lyt.addWidget(self.codeedit, alignment=Qt.AlignHCenter|Qt.AlignTop)
-        self.codeedit_showcase_lyt.addSpacing(59)
-        self.codeedit_themes_lyt = QHBoxLayout()
-        self.codeedit_showcase_lyt.addLayout(self.codeedit_themes_lyt)
 
-        self.codeedit_themebtn1 = StyledButton("Default", style="hyper")
-        self.codeedit_themebtn1.setStyleSheet("font-size: 15px;")
-        self.codeedit_themebtn1.setFixedHeight(30)
+        self.codeedit_showcase_lyt.addSpacing(9)
 
-        self.codeedit_themebtn2 = StyledButton("One Dark", style="hyper")
-        self.codeedit_themebtn2.setStyleSheet("font-size: 15px;")
-        self.codeedit_themebtn2.setFixedHeight(30)
+        self.codeedit_theme_btngrp = SegmentedButtonGroup(radio=True)
+        self.codeedit_theme_btngrp.setFixedHeight(32)
 
-        self.codeedit_themebtn3 = StyledButton("Monokai", style="hyper")
-        self.codeedit_themebtn3.setStyleSheet("font-size: 15px;")
-        self.codeedit_themebtn3.setFixedHeight(30)
+        self.codeedit_theme_btngrp.addButton("Default",   tag=0)
+        self.codeedit_theme_btngrp.addButton("One Light", tag=1)
+        self.codeedit_theme_btngrp.addButton("One Dark",  tag=2)
+        self.codeedit_theme_btngrp.addButton("Monokai",   tag=3)
+        self.codeedit_theme_btngrp.addButton("Oceanic",   tag=4)
+        self.codeedit_theme_btngrp.addButton("Zenburn",   tag=5)
 
-        self.codeedit_themebtn1.clicked.connect(lambda: self.codeedit.setTheme("default"))
-        self.codeedit_themebtn2.clicked.connect(lambda: self.codeedit.setTheme("one-dark"))
-        self.codeedit_themebtn3.clicked.connect(lambda: self.codeedit.setTheme("material-monokai"))
+        self.codeedit_theme_btngrp.getByTag(2).setChecked(True)
 
-        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn1)
-        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn2)
-        self.codeedit_themes_lyt.addWidget(self.codeedit_themebtn3)
+        @self.codeedit_theme_btngrp.clicked.connect
+        def slot(tag):
+            btn = self.codeedit_theme_btngrp.getByTag(tag)
+            self.codeedit.setTheme(btn.text().lower().replace(" ", "-"))
+
+        self.codeedit_showcase_lyt.addWidget(self.codeedit_theme_btngrp)
+
+
+        ##################################################
+        #                                                #
+        #                Spinner Widget                  #
+        #                                                #
+        ##################################################
+
+        self.spinner_showcase_wdt = QWidget()
+        self.spinner_showcase_lyt = QVBoxLayout()
+        self.spinner_showcase_lyt.setSpacing(5)
+        self.spinner_showcase_lyt.setAlignment(Qt.AlignTop|Qt.AlignHCenter)
+        self.spinner_showcase_wdt.setLayout(self.spinner_showcase_lyt)
+
+        self.spinner_showcase_lyt.addWidget(QLabel("<span style='font-size:30px;'>Spinner</span>"),
+                                           alignment=Qt.AlignHCenter)
+        self.spinner_showcase_lyt.addWidget(QLabel("<span style='font-size:15px; color:#777777;'>It's spinning! You can use this widget as icon argument.</span>"),
+                                           alignment=Qt.AlignHCenter)
+
+        self.spinner_showcase_lyt.addSpacing(70)
+
+        self.spinner_row1 = QHBoxLayout()
+        self.spinner_row2 = QHBoxLayout()
+        self.spinner_row3 = QHBoxLayout()
+        self.spinner_row4 = QHBoxLayout()
+        self.spinner_showcase_lyt.addLayout(self.spinner_row1)
+        self.spinner_showcase_lyt.addSpacing(15)
+        self.spinner_showcase_lyt.addLayout(self.spinner_row2)
+        self.spinner_showcase_lyt.addSpacing(15)
+        self.spinner_showcase_lyt.addLayout(self.spinner_row3)
+        self.spinner_showcase_lyt.addSpacing(15)
+        self.spinner_showcase_lyt.addLayout(self.spinner_row4)
+
+
+        self.spinner_style1_1 = Spinner(1.5, QColor(0, 0, 0))
+        self.spinner_style1_1.setFixedSize(18, 18)
+
+        self.spinner_style1_2 = Spinner(1.5, QColor(0, 0, 0))
+        self.spinner_style1_2.setFixedSize(36, 36)
+
+        self.spinner_style1_3 = Spinner(1.5, QColor(0, 0, 0))
+        self.spinner_style1_3.setFixedSize(78, 78)
+
+        self.spinner_row1.addWidget(QLabel("<span style='font-size:17px; color:#444444;'>Fixed Width</span>"))
+        self.spinner_row1.addWidget(self.spinner_style1_1)
+        self.spinner_row1.addSpacing(20)
+        self.spinner_row1.addWidget(self.spinner_style1_2)
+        self.spinner_row1.addSpacing(20)
+        self.spinner_row1.addWidget(self.spinner_style1_3)
+
+
+        self.spinner_style2_1 = Spinner(1.5, QColor(0, 0, 0))
+        self.spinner_style2_1.setFixedSize(18, 18)
+
+        self.spinner_style2_2 = Spinner(6.0, QColor(0, 0, 0))
+        self.spinner_style2_2.setFixedSize(36, 36)
+
+        self.spinner_style2_3 = Spinner(18, QColor(0, 0, 0))
+        self.spinner_style2_3.setFixedSize(78, 78)
+
+        self.spinner_row2.addWidget(QLabel("<span style='font-size:17px; color:#444444;'>Increasing width</span>"))
+        self.spinner_row2.addWidget(self.spinner_style2_1)
+        self.spinner_row2.addSpacing(20)
+        self.spinner_row2.addWidget(self.spinner_style2_2)
+        self.spinner_row2.addSpacing(20)
+        self.spinner_row2.addWidget(self.spinner_style2_3)
+
+
+        self.spinner_style3_1 = Spinner(2, QColor(0, 0, 0))
+        self.spinner_style3_1.animType = 0
+        self.spinner_style3_1.setFixedSize(18, 18)
+
+        self.spinner_style3_2 = Spinner(2, QColor(0, 0, 0))
+        self.spinner_style3_2.animType = 0
+        self.spinner_style3_2.setFixedSize(36, 36)
+
+        self.spinner_style3_3 = Spinner(2, QColor(0, 0, 0))
+        self.spinner_style3_3.animType = 0
+        self.spinner_style3_3.setFixedSize(78, 78)
+
+        self.spinner_row3.addWidget(QLabel("<span style='font-size:17px; color:#444444;'>Boring animation type</span>"))
+        self.spinner_row3.addWidget(self.spinner_style3_1)
+        self.spinner_row3.addSpacing(20)
+        self.spinner_row3.addWidget(self.spinner_style3_2)
+        self.spinner_row3.addSpacing(20)
+        self.spinner_row3.addWidget(self.spinner_style3_3)
+
+
+        self.spinner_style4_1 = Spinner(4, QColor(255, 0, 0))
+        self.spinner_style4_1.animType = 0
+        self.spinner_style4_1.speed = 1.2
+        self.spinner_style4_1.setFixedSize(24, 24)
+
+        self.spinner_style4_2 = Spinner(2, QColor(0, 255, 20))
+        self.spinner_style4_2.setFixedSize(36, 36)
+
+        self.spinner_style4_3 = Spinner(5, QColor(0, 55, 255))
+        self.spinner_style4_3.speed = 12
+        self.spinner_style4_3.setFixedSize(55, 55)
+
+        self.spinner_row4.addWidget(QLabel("<span style='font-size:15px; color:#444444;'>Variations</span>"))
+        self.spinner_row4.addWidget(self.spinner_style4_1)
+        self.spinner_row4.addSpacing(25)
+        self.spinner_row4.addWidget(self.spinner_style4_2)
+        self.spinner_row4.addSpacing(45)
+        self.spinner_row4.addWidget(self.spinner_style4_3)
 
 
         # finalize layout
@@ -605,6 +804,7 @@ class MainWindow(QWidget):
         self.layout.addWidget(self.dropfile_showcase_wdt)
         self.layout.addWidget(self.emwin_showcase_wdt)
         self.layout.addWidget(self.codeedit_showcase_wdt)
+        self.layout.addWidget(self.spinner_showcase_wdt)
 
         self.togglesw_showcase_wdt.show()
         self.stbtn_showcase_wdt.hide()
@@ -613,6 +813,7 @@ class MainWindow(QWidget):
         self.dropfile_showcase_wdt.hide()
         self.emwin_showcase_wdt.hide()
         self.codeedit_showcase_wdt.hide()
+        self.spinner_showcase_wdt.hide()
 
 
 
