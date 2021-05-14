@@ -12,8 +12,9 @@ More useful and stylish widgets for PyQt5 such as toggle switches, animated butt
 - [Installing](#Installing)
 - [Usage](#Usage)
 - [Widgets](#Widgets)
-- [Examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/)
-- [Documentation](documentation.md)
+- [Examples](#Examples)
+- [Documentation](#Documentation)
+- [Styling Reference](#Styling)
 - [Dependencies](#Dependencies)
 - [TODO](#Todo)
 - [License](#License)
@@ -51,6 +52,14 @@ layout.addWidget(togglesw)
 | ![CodeTextEdit](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/codetextshowcase.gif) <br> **CodeTextEdit** <br> [Documentation](documentation.md) | ![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.png) <br> **TitleBar** <br> [Documentation](documentation.md) |
 | ![Spinner](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/spinnershowcase.gif) <br> **Spinner** <br> [Documentation](documentation.md) | ![Toast](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toastshowcase.gif) <br> **Toast** <br> [Documentation](documentation.md) |
 
+## Examples
+See [examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/) page
+
+## Documentation
+See [documentation](documentation.md) page
+
+# Styling
+See [styling reference](stylingref.md) page
 
 ## Dependencies
  - [PyQt5](https://pypi.org/project/PyQt5/)
