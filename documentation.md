@@ -114,20 +114,50 @@ Other stuff that the the library provides but are not mainly widgets. Some are t
 ## TitleBar
 `TitleBar` lets the developer use a custom window title bar, this widget also provides window resizing controls (WIP) \
 \
-![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.png)
+![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.gif)
 
 #### Parameters
 - `parent` (QWidget) : Parent widget of the window
 - `title` (str) : Title of the window (Optional)
 
 #### Attributes
-- `close_btn` (StyledButton) : Close button
-- `max_btn` (StyledButton) : Maximize button
-- `min_btn` (StyledButton) : Minimize button
+- `closeButton` (StyledButton) : Close button
+- `maxButton` (StyledButton) : Maximize button
+- `minButton` (StyledButton) : Minimize button
 
 #### Methods
 - `setTitle(title)` : Change title
 - `title()` (str) : Get title
+
+## Spinner
+`Spinner` is just a visual widget that has a spinning circle on it. You can use this as `icon` parameter on widgets that has icons\
+\
+![Spinner](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/spinnershowcase.gif)
+
+#### Parameters
+- `width` (float) : Width of the circle
+- `color` (QColor) : Color of the circle
+
+## Toast
+`Toast` is notification widget that appears at the bottom of the window.\
+\
+![Toast](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toastshowcase.gif)
+
+#### Parameters
+- `parent` (QWidget) : Parent widget
+- `text` (str) : Text of the widget (Optional)
+- `icon` (str/Spinner) : Icon of the widget (Optional)
+- `closeButton` (bool) : Whether to show the close button or not
+
+#### Methods
+- `rise(duration: int)` : Shows the toast notification for duration seconds
+- `fall()` : Hides the toast notification
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 # Other stuff

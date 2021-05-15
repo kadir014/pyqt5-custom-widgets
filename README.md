@@ -2,7 +2,7 @@
 <p>
   <img src="https://img.shields.io/badge/python-3.6%2B-green">
   <img src="https://img.shields.io/badge/license-GPL%203.0-blue.svg">
-  <img src="https://img.shields.io/badge/version-1.0.0-orange">
+  <img src="https://img.shields.io/badge/version-1.0.1-orange">
 </p>
 More useful and stylish widgets for PyQt5 such as toggle switches, animated buttons, etc..
 <br>
@@ -12,9 +12,9 @@ More useful and stylish widgets for PyQt5 such as toggle switches, animated butt
 - [Installing](#Installing)
 - [Usage](#Usage)
 - [Widgets](#Widgets)
-- [Examples](#Examples)
-- [Documentation](#Documentation)
-- [Styling Reference](#Styling)
+- [Examples](#References)
+- [Documentation](#References)
+- [Styling Reference](#References)
 - [Dependencies](#Dependencies)
 - [TODO](#Todo)
 - [License](#License)
@@ -31,15 +31,25 @@ python -m pip install pyqt5Custom
 Also you can also use PySide2 instead of PyQt5 with just litte changes.
 
 ## Usage
-Just import `pyqt5Custom` and you're ready to go. You can check out [Examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/), one little example for ToggleSwitch widget:
+Just import `pyqt5Custom` and you're ready to go. You can check out [Examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/), one little example for StyledButton widget:
 ```py
-from pyqt5Custom import ToggleSwitch
+from pyqt5Custom import StyledButton
 
 ...
 
-togglesw = ToggleSwitch("Turn on/off the lights", style="ios")
-togglesw.setStyleSheet("font-size:15px; color: #444444;")
-layout.addWidget(togglesw)
+btn = StyledButton(text="Hello!")
+btn.setStyleDict({
+    "border-radius" : 20,
+    "font-family" : "Helvetica",
+    "font-size" : 17
+  })
+
+@btn.clicked.connect
+def slot():
+  print("Quitting!")
+  app.exit()
+
+layout.addWidget(btn)
 
 ...
 ```
@@ -49,17 +59,13 @@ layout.addWidget(togglesw)
 | :---: | :---: |
 | ![ImageBox](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/imagebox.png) <br> **ImageBox** <br> [Documentation](documentation.md) | ![ColorPicker](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/colorpicker.png) <br> **ColorPicker** <br> [Documentation](documentation.md) |
 | ![DragDropFile](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/dropfileshowcase.gif) <br> **DragDropFile** <br> [Documentation](documentation.md) | ![EmbedWindow](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/embedwindowshowcase.gif) <br> **EmbedWindow** <br> [Documentation](documentation.md) |
-| ![CodeTextEdit](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/codetextshowcase.gif) <br> **CodeTextEdit** <br> [Documentation](documentation.md) | ![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.png) <br> **TitleBar** <br> [Documentation](documentation.md) |
+| ![CodeTextEdit](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/codetextshowcase.gif) <br> **CodeTextEdit** <br> [Documentation](documentation.md) | ![TitleBar](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/titlebarshowcase.gif) <br> **TitleBar** <br> [Documentation](documentation.md) |
 | ![Spinner](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/spinnershowcase.gif) <br> **Spinner** <br> [Documentation](documentation.md) | ![Toast](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/data/toastshowcase.gif) <br> **Toast** <br> [Documentation](documentation.md) |
 
-## Examples
-See [examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/) page
-
-## Documentation
-See [documentation](documentation.md) page
-
-# Styling
-See [styling reference](stylingref.md) page
+## References
+- See [Examples](https://github.com/kadir014/pyqt5-custom-widgets/blob/main/examples/) page for examples
+- See [Documentation](documentation.md) page for documentation and detailed widget references
+- See [styling reference](stylingref.md) page for styling instructions on custom widget
 
 ## Dependencies
  - [PyQt5](https://pypi.org/project/PyQt5/)

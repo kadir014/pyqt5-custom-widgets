@@ -7,6 +7,7 @@ from PyQt5.QtCore    import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QLabel
 from PyQt5.QtGui     import QColor, QPainter, QPen, QBrush, QFont
 
+from .animation import Animation, AnimationHandler
 from .styledbutton import StyledButton
 
 
@@ -21,14 +22,6 @@ class TitleBar(QWidget):
         setattr(self.parent(), "mousePressEvent",   self.parentMousePressEvent)
         setattr(self.parent(), "mouseMoveEvent",    self.parentMouseMoveEvent)
         setattr(self.parent(), "mouseReleaseEvent", self.parentMouseReleaseEvent)
-
-        # self.event_widget = QWidget()
-        # self.event_widget.setParent(self.parent())
-        # self.event_widget.setGeometry(5, 5, self.parent().width()-10, self.parent().height()-10)
-        # self.event_widget.raise_()
-        # self.event_widget.hide()
-        #
-        # setattr(self.event_widget, "enterEvent", self.childEnterEvent)
 
         self._resizable = True
 
@@ -54,31 +47,31 @@ class TitleBar(QWidget):
         self.title_lbl = QLabel(title)
         self.layout.addWidget(self.title_lbl)
 
-        self.close_btn = StyledButton(text="✕")
-        self.close_btn.setFixedSize(self.height()+19, self.height())
+        self.closeButton = StyledButton(text="✕")
+        self.closeButton.setFixedSize(self.height()+19, self.height())
 
-        self.max_btn = StyledButton(text="🗖")
-        self.max_btn.setFixedSize(self.height()+19, self.height())
+        self.maxButton = StyledButton(text="🗖")
+        self.maxButton.setFixedSize(self.height()+19, self.height())
 
-        self.min_btn = StyledButton(text="🗕")
-        self.min_btn.setFixedSize(self.height()+19, self.height())
+        self.minButton = StyledButton(text="🗕")
+        self.minButton.setFixedSize(self.height()+19, self.height())
 
         self._styleControlButtons()
 
-        self.close_btn.clicked.connect(self.parent().close)
+        self.closeButton.clicked.connect(self.parent().close)
 
-        self.min_btn.clicked.connect(self.parent().showMinimized)
+        self.minButton.clicked.connect(self.parent().showMinimized)
 
-        @self.max_btn.clicked.connect
+        @self.maxButton.clicked.connect
         def slot():
             if self.parent().isMaximized():
                 self.parent().showNormal()
             else:
                 self.parent().showMaximized()
 
-        self.layout.addWidget(self.min_btn, alignment=Qt.AlignRight)
-        self.layout.addWidget(self.max_btn)
-        self.layout.addWidget(self.close_btn)
+        self.layout.addWidget(self.minButton, alignment=Qt.AlignRight)
+        self.layout.addWidget(self.maxButton)
+        self.layout.addWidget(self.closeButton)
 
         self.pressing = False
 
@@ -101,65 +94,79 @@ class TitleBar(QWidget):
             "west" : Qt.SizeHorCursor,
         }
 
+        self.anims = list()
+
+        self._styleControlButtons()
+
     def __repr__(self):
         return f"<pyqt5Custom.TitleBar()>"
+
+    def update(self):
+        for a in self.anims:
+            a.update()
+        super().update()
+
+    def newAnimation(self, start=0, end=1, type=Animation.easeOutCubic):
+        a = AnimationHandler(self, start, end, type)
+        self.anims.append(a)
+        return a
 
     def setWindowResizable(self, resizable):
         self._resizable = resizable
 
         if self._resizable:
-            self.max_btn.show()
+            self.maxButton.show()
 
         else:
-            self.max_btn.hide()
+            self.maxButton.hide()
 
     def setStyleDict(self, styledict):
         for k in styledict:
             self.styleDict[k] = styledict[k]
-        self._styleControlButtons()
+        #self._styleControlButtons()
 
     def _styleControlButtons(self):
-        self.close_btn.setStyleDict({
+        self.closeButton.setStyleDict({
                 "font-family" : self.styleDict["font-family"],
                 "font-size" : self.styleDict["font-size"],
                 "border-color" : (0, 0, 0, 0),
                 "border-radius" : 0,
                 "background-color" : (255, 255, 255)
             })
-        self.close_btn.setStyleDict({
+        self.closeButton.setStyleDict({
                 "background-color" : (224, 0, 0),
                 "color": (255, 255, 255)
             }, "hover")
-        self.close_btn.setStyleDict({
+        self.closeButton.setStyleDict({
                 "background-color" : (255, 0, 0),
                 "color" : (255, 255, 255)
             }, "press")
 
-        self.max_btn.setStyleDict({
+        self.maxButton.setStyleDict({
                 "font-family" : self.styleDict["font-family"],
                 "font-size" : self.styleDict["font-size"],
                 "border-color" : (0, 0, 0, 0),
                 "border-radius" : 0,
                 "background-color" : (255, 255, 255)
             })
-        self.max_btn.setStyleDict({
+        self.maxButton.setStyleDict({
                 "background-color" : (236, 236, 236),
             }, "hover")
-        self.max_btn.setStyleDict({
+        self.maxButton.setStyleDict({
                 "background-color" : (218, 218, 218),
             }, "press")
 
-        self.min_btn.setStyleDict({
+        self.minButton.setStyleDict({
                 "font-family" : self.styleDict["font-family"],
                 "font-size" : self.styleDict["font-size"],
                 "border-color" : (0, 0, 0, 0),
                 "border-radius" : 0,
                 "background-color" : (255, 255, 255)
             })
-        self.min_btn.setStyleDict({
+        self.minButton.setStyleDict({
                 "background-color" : (236, 236, 236),
             }, "hover")
-        self.min_btn.setStyleDict({
+        self.minButton.setStyleDict({
                 "background-color" : (218, 218, 218),
             }, "press")
 
@@ -291,6 +298,10 @@ class TitleBar(QWidget):
         if self.styleDict["font-family"]: fnt.setFamily(self.styleDict["font-family"])
         self.title_lbl.setFont(fnt)
 
+        plt = self.title_lbl.palette()
+        plt.setColor(self.title_lbl.foregroundRole(), QColor(*self.styleDict["color"]))
+        self.title_lbl.setPalette(plt)
+
         brush = QBrush(QColor(*self.styleDict["background-color"]))
         pen = QPen(QColor(0, 0, 0, 0), 0)
         pt.setBrush(brush)
@@ -299,6 +310,14 @@ class TitleBar(QWidget):
         pt.drawRect(0, 0, self.width(), self.height())
 
         pt.end()
+
+        f = False
+        for a in self.anims:
+            if not a.done():
+                f = True
+                break
+
+        if f: self.update()
 
     def mousePressEvent(self, event):
         if event.x() < self.parent().width() - 10:

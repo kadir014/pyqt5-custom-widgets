@@ -33,24 +33,32 @@ class AnimationHandler:
         self.sensitivity = 0.001
 
         self.reverse = False
-        self.start_time = None
-        self.interval = 20 / 1000
+        self.loop = False
+        self.started = None
+
+        self._tickfunc = None
 
     def __repr__(self):
-        return f"<pyqt5Custom.AnimationHandler({self.startv}->{self.endv}, interval={self.interval:.4})>"
+        return f"<pyqt5Custom.AnimationHandler({self.startv}->{self.endv})>"
 
-    def start(self, reverse=False):
+    def tick(self, func):
+        self._tickfunc = func
+        return func
+
+    def start(self, reverse=False, loop=False):
         self.reverse = reverse
-        self.start_time = True
+        self.loop = loop
+        self.started = True
         self.orgstart_time = time.time()
         self.value = 0
+        self.widget.update()
 
     def reset(self):
         self.value = 0
-        self.start_time = None
+        self.started = None
 
     def done(self):
-        return self.start_time is None
+        return self.started is None
 
     def update(self):
         if not self.done():
@@ -59,9 +67,17 @@ class AnimationHandler:
             self.value = self.type(ep * self.speed)
 
             if self.reverse:
-                if self.current() <= self.startv + self.sensitivity: self.start_time = None
+                if self.current() <= self.startv + self.sensitivity: self.started = None
             else:
-                if self.current() >= self.endv - self.sensitivity: self.start_time = None
+                if self.current() >= self.endv - self.sensitivity: self.started = None
+
+            if self.done():
+                if self.loop:
+                    self.start(reverse=not self.reverse, loop=True)
+                return
+
+            #print(self.value)
+            if self._tickfunc: self._tickfunc()
 
     def current(self):
         if self.reverse:

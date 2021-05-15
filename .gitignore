@@ -4,3 +4,4 @@ dist/
 olddist/
 pyqt5Custom.egg-info/
 setup.py
+MANIFEST.in
