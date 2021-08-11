@@ -66,9 +66,11 @@ Other stuff that the the library provides but are not mainly widgets. Some are t
 - `source` (str) : Filepath or URL of the source image/gif
 - `keepAspectRatio` (bool) : Protect aspect ratio. This parameter is optional
 - `smoothScale` (bool) : Transform the image smoothly. This parameter is optional
+- `autoResize` (bool) : Sets the autosizing of the image/gif
 
 #### Methods
 - `setIcon(filepath)` : Changes button's icon
+- `changeSize(width, height)` : Resizes your image/gif
 
 
 ## ColorPicker
