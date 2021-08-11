@@ -3,7 +3,7 @@
 #   https://github.com/kadir014/pyqt5-custom-widgets  #
 
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 
 from .toggleswitch import ToggleSwitch
