@@ -13,7 +13,7 @@ from PyQt5.QtGui     import QPixmap, QMovie, QImage
 
 
 class ImageBox(QLabel):
-    def __init__(self, source=None, parent=None, keepAspectRatio=True, smoothScale=True):
+    def __init__(self, source=None, parent=None, keepAspectRatio=True, smoothScale=True,autoResize = True):
         super().__init__()
 
         self.source = source
@@ -21,6 +21,8 @@ class ImageBox(QLabel):
 
         self.keepAspectRatio = keepAspectRatio
         self.smoothScale = smoothScale
+
+        self.autoResize = autoResize
 
         if self.source is not None: self.setSource(self.source)
 
@@ -95,8 +97,21 @@ class ImageBox(QLabel):
         self.resizeEvent(None)
 
     def resizeEvent(self, event):
-        w, h = self.width(), self.height()
+        if self.autoResize:
+            w, h = self.width(), self.height()
 
+            t = (Qt.FastTransformation, Qt.SmoothTransformation)[self.smoothScale]
+            k = (Qt.IgnoreAspectRatio, Qt.KeepAspectRatio)[self.keepAspectRatio]
+
+            if self.animated:
+                self.movie.setScaledSize(QSize(w, h))
+
+            else:
+                self.pixmap = self.orgpixmap.scaled(w, h, transformMode=t, aspectRatioMode=k)
+                self.setPixmap(self.pixmap)
+
+    def changeSize(self,width, height):
+        w, h = width, height
         t = (Qt.FastTransformation, Qt.SmoothTransformation)[self.smoothScale]
         k = (Qt.IgnoreAspectRatio, Qt.KeepAspectRatio)[self.keepAspectRatio]
 
